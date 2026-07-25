@@ -1,0 +1,1994 @@
+openapi: 3.1.0
+info:
+  title: Fast Browsing Scouting API
+  version: 0.1.0
+servers:
+- url: https://api.yutori.com
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: Scouting
+paths:
+  /v1/scouting/updates:
+    get:
+      summary: Get All Updates Api
+      description: Get all updates across the user's scouts within a time range.
+      operationId: get_all_updates_api_v1_scouting_updates_get
+      parameters:
+      - name: start_time
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Start Time
+      - name: end_time
+        in: query
+        required: true
+        schema:
+          type: string
+          title: End Time
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 50
+          title: Page Size
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cursor
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllUpdatesPublicResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Scouting
+  /v1/scouting/tasks/{scout_id}/updates:
+    get:
+      summary: Get Updates Api
+      operationId: get_updates_api_v1_scouting_tasks__scout_id__updates_get
+      parameters:
+      - name: scout_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scout Id
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Page Size
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cursor
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetScoutUpdatesPublicResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Scouting
+  /v1/usage:
+    get:
+      tags:
+      - Scouting
+      summary: Get Usage
+      description: Get usage statistics over different time periods, active scouts, and rate limits.
+      operationId: get_usage_v1_usage_get
+      parameters:
+      - name: period
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/TimeRange'
+          default: 24h
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scouting/tasks:
+    post:
+      tags:
+      - Scouting
+      summary: Create Scout Task
+      operationId: create_scout_task_v1_scouting_tasks_post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateScoutRequestAPI'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateScoutResponsePublic'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Scouting
+      summary: Get Scouts
+      description: List scouting tasks for this user.
+      operationId: get_scouts_v1_scouting_tasks_get
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - enum:
+            - active
+            - paused
+            - done
+            type: string
+          - type: 'null'
+          description: Filter by scout status
+          title: Status
+        description: Filter by scout status
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Page Size
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cursor
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoutListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scouting/tasks/{scout_id}:
+    put:
+      tags:
+      - Scouting
+      summary: Edit Scout
+      operationId: edit_scout_v1_scouting_tasks__scout_id__put
+      parameters:
+      - name: scout_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scout Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditScoutRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Scout'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Scouting
+      summary: Partially update a Scout
+      description: Update specific fields of an existing Scout. Only provided fields will be updated; omitted fields remain unchanged.
+      operationId: patch_scout_v1_scouting_tasks__scout_id__patch
+      parameters:
+      - name: scout_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scout Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchScoutRequestAPI'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateScoutResponsePublic'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Scouting
+      summary: Get Scout Detail
+      description: Get detailed information about a specific scout owned by this user.
+      operationId: get_scout_detail_v1_scouting_tasks__scout_id__get
+      parameters:
+      - name: scout_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scout Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoutDetailResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Scouting
+      summary: Delete Scout
+      operationId: delete_scout_v1_scouting_tasks__scout_id__delete
+      parameters:
+      - name: scout_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scout Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scouting/tasks/{scout_id}/done:
+    post:
+      tags:
+      - Scouting
+      summary: Mark Scout As Done
+      description: Mark a scout as done. The scout will be archived and stop running.
+      operationId: mark_scout_as_done_v1_scouting_tasks__scout_id__done_post
+      parameters:
+      - name: scout_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scout Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scouting/tasks/{scout_id}/complete:
+    post:
+      tags:
+      - Scouting
+      summary: Mark Scout As Complete
+      description: '⚠️ DEPRECATED: Use POST /scouting/tasks/{scout_id}/done instead.'
+      operationId: mark_scout_as_complete_v1_scouting_tasks__scout_id__complete_post
+      deprecated: true
+      parameters:
+      - name: scout_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scout Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scouting/tasks/{scout_id}/subscribe:
+    post:
+      tags:
+      - Scouting
+      summary: Subscribe
+      description: '⚠️ DEPRECATED: Use PUT /scouting/tasks/{scout_id}/email-settings with subscribers_to_add instead'
+      operationId: subscribe_v1_scouting_tasks__scout_id__subscribe_post
+      deprecated: true
+      parameters:
+      - name: scout_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scout Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubscriptionRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scouting/tasks/{scout_id}/unsubscribe:
+    post:
+      tags:
+      - Scouting
+      summary: Unsubscribe
+      description: '⚠️ DEPRECATED: Use PUT /scouting/tasks/{scout_id}/email-settings with subscribers_to_remove instead'
+      operationId: unsubscribe_v1_scouting_tasks__scout_id__unsubscribe_post
+      deprecated: true
+      parameters:
+      - name: scout_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scout Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteSubscriptionRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scouting/tasks/{scout_id}/subscriptions:
+    get:
+      tags:
+      - Scouting
+      summary: Get Subscriptions
+      operationId: get_subscriptions_v1_scouting_tasks__scout_id__subscriptions_get
+      parameters:
+      - name: scout_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scout Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scouting/tasks/{scout_id}/subscribe/bulk:
+    post:
+      tags:
+      - Scouting
+      summary: Bulk Subscribe
+      description: '⚠️ DEPRECATED: Use PUT /scouting/tasks/{scout_id}/email-settings with subscribers_to_add instead'
+      operationId: bulk_subscribe_v1_scouting_tasks__scout_id__subscribe_bulk_post
+      deprecated: true
+      parameters:
+      - name: scout_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scout Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkAddSubscribersRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scouting/tasks/{scout_id}/pause:
+    post:
+      tags:
+      - Scouting
+      summary: Pause Scout Endpoint
+      operationId: pause_scout_endpoint_v1_scouting_tasks__scout_id__pause_post
+      parameters:
+      - name: scout_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scout Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scouting/tasks/{scout_id}/resume:
+    post:
+      tags:
+      - Scouting
+      summary: Resume Scout Endpoint
+      operationId: resume_scout_endpoint_v1_scouting_tasks__scout_id__resume_post
+      parameters:
+      - name: scout_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scout Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scouting/tasks/{scout_id}/restart:
+    post:
+      tags:
+      - Scouting
+      summary: Restart Scout Endpoint
+      operationId: restart_scout_endpoint_v1_scouting_tasks__scout_id__restart_post
+      parameters:
+      - name: scout_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scout Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scouting/tasks/{scout_id}/email-settings:
+    put:
+      tags:
+      - Scouting
+      summary: Update Email Settings
+      description: Update email notification settings and manage subscribers for a scout.
+      operationId: update_email_settings_v1_scouting_tasks__scout_id__email_settings_put
+      parameters:
+      - name: scout_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Scout Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEmailSettingsRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateEmailSettingsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/scouting/webhooks/test:
+    post:
+      tags:
+      - Scouting
+      summary: Test Webhook
+      operationId: test_webhook_v1_scouting_webhooks_test_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestWebhookFormatRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DeleteSubscriptionRequest:
+      properties:
+        method:
+          type: string
+          enum:
+          - email
+          - scout_webhook
+          - slack_webhook
+          - zapier_webhook
+          - rss
+          title: Method
+        address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Address
+          description: Webhook URL (required for webhook method)
+      type: object
+      required:
+      - method
+      title: DeleteSubscriptionRequest
+    SubscriberResult:
+      properties:
+        email:
+          type: string
+          title: Email
+          description: The email address
+        status:
+          type: string
+          enum:
+          - added
+          - removed
+          - already_subscribed
+          - not_found
+          - invalid
+          - permission_denied
+          title: Status
+          description: Result status for this email operation
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+          description: Additional details about the result
+      type: object
+      required:
+      - email
+      - status
+      title: SubscriberResult
+    TestWebhookFormatRequest:
+      properties:
+        webhook_url:
+          type: string
+          title: Webhook Url
+          description: Webhook URL to test
+        webhook_format:
+          type: string
+          enum:
+          - scout
+          - slack
+          - zapier
+          title: Webhook Format
+          description: Webhook payload format to test (use 'slack' for Slack incoming webhooks)
+        scout_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Scout Id
+          description: Optional scout ID to use for test data
+      type: object
+      required:
+      - webhook_url
+      - webhook_format
+      title: TestWebhookFormatRequest
+    UpdateEmailSettingsRequest:
+      properties:
+        skip_email:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Skip Email
+          description: "\n        If true, email notifications will be skipped and only webhook notifications will be sent.\n        If false, both email and webhook notifications will be sent (default behavior).\n        "
+        subscribers_to_add:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Subscribers To Add
+          description: List of email addresses to subscribe to this scout. Maximum 200 per request. Duplicates are automatically ignored.
+        subscribers_to_remove:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Subscribers To Remove
+          description: List of email addresses to unsubscribe from this scout. Non-creators can only remove themselves.
+      type: object
+      title: UpdateEmailSettingsRequest
+    BulkAddSubscribersRequest:
+      properties:
+        emails:
+          items:
+            type: string
+          type: array
+          title: Emails
+          description: List of user emails to subscribe to the scout
+      type: object
+      required:
+      - emails
+      title: BulkAddSubscribersRequest
+    UpdateEmailSettingsResponse:
+      properties:
+        scout_id:
+          type: string
+          title: Scout Id
+          description: The ID of the scout
+        skip_email:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Skip Email
+          description: Current skip_email setting, if updated
+        subscribers_added:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/SubscriberResult'
+            type: array
+          - type: 'null'
+          title: Subscribers Added
+          description: Results for each email address in subscribers_to_add
+        subscribers_removed:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/SubscriberResult'
+            type: array
+          - type: 'null'
+          title: Subscribers Removed
+          description: Results for each email address in subscribers_to_remove
+        message:
+          type: string
+          title: Message
+          description: Summary of changes made
+      type: object
+      required:
+      - scout_id
+      - message
+      title: UpdateEmailSettingsResponse
+    EditScoutRequest:
+      properties:
+        query:
+          type: string
+          title: Query
+          description: "\n        The query string includes any notification preferences in natural language.\n        This is typically what the user types into the UI.\n        e.g. \"Posts on r/sanfrancisco about new offices opening in downtown sf, daily at 9am\"\n        Based on the user's query, we LLM-suggest 3 'when to notify' options, and the user's selection is\n        translated to next_output_timestamp and output_interval.\n        "
+        query_object:
+          additionalProperties: true
+          type: object
+          title: Query Object
+          description: Query metadata
+        display_name:
+          type: string
+          title: Display Name
+          default: ''
+        user_timezone:
+          type: string
+          title: User Timezone
+          description: "\n        Automatically inferred from the client.\n        E.g. \"America/Los_Angeles\"\n        "
+        llm_output:
+          additionalProperties: true
+          type: object
+          title: Llm Output
+          description: Legacy attribute that might be removed in the future.
+        output_interval:
+          type: integer
+          title: Output Interval
+          description: "\n        Interval in seconds of how often to run the task.\n        For 'whenever there's an update' style Scouts, this'll be 3600 (= 1 hour).\n        "
+          default: 7200
+        next_output_timestamp:
+          type: integer
+          title: Next Output Timestamp
+          description: "\n        Unix timestamp of when the next output is expected for periodic Scouts.\n        For 'whenever there's an update' style Scouts, this should be 0.\n        "
+          default: 0
+        user_location:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Location
+          description: "\n        The user's coarse location in the format: city, region_code, country_name.\n        E.g. \"San Francisco, CA, US\"\n        "
+        is_public:
+          type: boolean
+          title: Is Public
+          description: "\n        Whether the scout is publicly accessible (true) or private (false).\n        Public scouts can be accessed by anyone via the UUID link.\n        Private scouts can only be accessed by the creator.\n        "
+          default: true
+        connectors_config:
+          anyOf:
+          - $ref: '#/components/schemas/ConnectorsConfigPayload'
+          - type: 'null'
+          description: "\n        Per-scout connector configuration. Controls which Composio OAuth connectors are enabled.\n        - null: connectors disabled (default, opt-in model)\n        - {\"enabled\": true}: all user's connectors enabled\n        - {\"enabled\": false}: connectors disabled\n        "
+      type: object
+      required:
+      - query
+      - query_object
+      - user_timezone
+      - llm_output
+      title: EditScoutRequest
+    GetAllUpdatesPublicResponse:
+      properties:
+        updates:
+          items:
+            $ref: '#/components/schemas/DeveloperUpdateWithScout'
+          type: array
+          title: Updates
+        prev_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev Cursor
+          description: Cursor for previous page
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+          description: Cursor for next page
+      type: object
+      required:
+      - updates
+      title: GetAllUpdatesPublicResponse
+      description: Public API response for fetching updates across API-created scouts.
+    JsonSchemaSpec:
+      properties:
+        type:
+          type: string
+          const: json
+          title: Type
+          default: json
+        json_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Json Schema
+          description: A JSON Schema object defining the structure
+      type: object
+      title: JsonSchemaSpec
+    ScoutListItem:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        query:
+          type: string
+          title: Query
+        display_name:
+          type: string
+          title: Display Name
+        status:
+          type: string
+          enum:
+          - active
+          - paused
+          - done
+          title: Status
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        next_output_timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Next Output Timestamp
+        output_interval:
+          type: integer
+          title: Output Interval
+          description: Run interval in seconds
+        rejection_reason:
+          anyOf:
+          - $ref: '#/components/schemas/RejectionReason'
+          - type: 'null'
+      type: object
+      required:
+      - id
+      - query
+      - display_name
+      - status
+      - created_at
+      - next_output_timestamp
+      - output_interval
+      title: ScoutListItem
+      description: Lightweight scout metadata for list endpoints.
+    TimeRange:
+      type: string
+      enum:
+      - 24h
+      - 7d
+      - 30d
+      - 90d
+      title: TimeRange
+    CreateSubscriptionRequest:
+      properties:
+        method:
+          type: string
+          enum:
+          - email
+          - scout_webhook
+          - slack_webhook
+          - zapier_webhook
+          - rss
+          title: Method
+        address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Address
+          description: Webhook URL (required for webhook method)
+      type: object
+      required:
+      - method
+      title: CreateSubscriptionRequest
+    ActivityCounts:
+      properties:
+        period:
+          type: string
+          enum:
+          - 24h
+          - 7d
+          - 30d
+          - 90d
+          title: Period
+        scout_runs:
+          type: integer
+          title: Scout Runs
+        browsing_tasks:
+          type: integer
+          title: Browsing Tasks
+        research_tasks:
+          type: integer
+          title: Research Tasks
+        navigator_calls:
+          type: integer
+          title: Navigator Calls
+          description: Navigator (chat completions) calls in period
+        n1_calls:
+          type: integer
+          title: N1 Calls
+          description: Deprecated alias of navigator_calls; prefer navigator_calls
+          deprecated: true
+          readOnly: true
+      type: object
+      required:
+      - period
+      - scout_runs
+      - browsing_tasks
+      - research_tasks
+      - navigator_calls
+      - n1_calls
+      title: ActivityCounts
+    ScoutDetailResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        query:
+          type: string
+          title: Query
+        display_name:
+          type: string
+          title: Display Name
+        status:
+          type: string
+          enum:
+          - active
+          - paused
+          - done
+          title: Status
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        next_run_timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Next Run Timestamp
+        next_output_timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Next Output Timestamp
+        user_timezone:
+          type: string
+          title: User Timezone
+        output_interval:
+          type: integer
+          title: Output Interval
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+        paused_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Paused At
+        rejection_reason:
+          anyOf:
+          - $ref: '#/components/schemas/RejectionReason'
+          - type: 'null'
+        last_update_timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Update Timestamp
+        update_count:
+          type: integer
+          title: Update Count
+        query_object:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Query Object
+        is_public:
+          type: boolean
+          title: Is Public
+          default: true
+        output_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Output Schema
+          description: JSON Schema for structured output, if configured
+          readOnly: true
+      type: object
+      required:
+      - id
+      - query
+      - display_name
+      - status
+      - created_at
+      - next_run_timestamp
+      - next_output_timestamp
+      - user_timezone
+      - output_interval
+      - completed_at
+      - paused_at
+      - last_update_timestamp
+      - update_count
+      - output_schema
+      title: ScoutDetailResponse
+      description: Detailed scout information for detail endpoint.
+    ConnectorsConfig:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether connectors are enabled for this scout
+      type: object
+      required:
+      - enabled
+      title: ConnectorsConfig
+    TaskSpec:
+      properties:
+        output_schema:
+          anyOf:
+          - $ref: '#/components/schemas/JsonSchemaSpec'
+          - type: 'null'
+      type: object
+      title: TaskSpec
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Citation:
+      properties:
+        id:
+          type: string
+          title: Id
+        url:
+          type: string
+          title: Url
+        preview_data:
+          additionalProperties: true
+          type: object
+          title: Preview Data
+      type: object
+      required:
+      - id
+      - url
+      title: Citation
+    DeveloperUpdate:
+      properties:
+        id:
+          type: string
+          title: Id
+        timestamp:
+          type: integer
+          title: Timestamp
+        content:
+          type: string
+          title: Content
+        citations:
+          items:
+            $ref: '#/components/schemas/Citation'
+          type: array
+          title: Citations
+        stats:
+          anyOf:
+          - $ref: '#/components/schemas/DeveloperReplayStats'
+          - type: 'null'
+        structured_result:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Structured Result
+        structured_output_status:
+          anyOf:
+          - type: string
+            enum:
+            - not_requested
+            - pending
+            - succeeded
+            - failed
+          - type: 'null'
+          title: Structured Output Status
+        header_image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Header Image Url
+      type: object
+      required:
+      - id
+      - timestamp
+      - content
+      title: DeveloperUpdate
+    CreateScoutRequestAPI:
+      properties:
+        output_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Output Schema
+          description: JSON Schema for structured output. Takes precedence over task_spec if both provided.
+          examples:
+          - items:
+              properties:
+                headline:
+                  description: News headline
+                  type: string
+                summary:
+                  description: Brief summary
+                  type: string
+                source_url:
+                  description: URL for more details
+                  type: string
+              type: object
+            type: array
+        task_spec:
+          anyOf:
+          - $ref: '#/components/schemas/TaskSpec'
+          - type: 'null'
+          description: Deprecated but still supported. Use output_schema instead.
+          deprecated: true
+        used_deprecated_task_spec:
+          type: boolean
+          title: Used Deprecated Task Spec
+          default: false
+          hidden: true
+        query:
+          type: string
+          title: Query
+          description: "\n        String describing what to monitor in natural language.\n        This is typically what a user types into the Scouts web UI (without any frequency preferences).\n        "
+          examples:
+          - Tell me about the latest news, product updates, press releases, social media announcements, investments into, or other relevant information about Yutori, the AI company.
+        output_interval:
+          type: integer
+          title: Output Interval
+          description: "\n        Interval in seconds of how often to run the task. This must be >= 1800 (= 30 minutes).\n        On the web UI, this is inferred from what the user types into the new scout input (e.g. \"daily at 9am\").\n        Recommended: 86400 (daily) or 3600 (hourly).\n        "
+          default: 86400
+          examples:
+          - 3600
+        start_timestamp:
+          type: integer
+          title: Start Timestamp
+          description: "\n        Unix timestamp (past, present, or future) of when the scout should start running.\n        If past, present, or up to 30 min in the future, the scout will start running immediately.\n        Else, the scout will start running at the specified timestamp.\n        "
+          default: 0
+          examples:
+          - 0
+        user_timezone:
+          type: string
+          title: User Timezone
+          description: "\n        String indicating the user's timezone (e.g. \"America/Los_Angeles\")\n        On the web UI, this is inferred from the browser's timezone.\n        Default: \"America/Los_Angeles\".\n        "
+          default: America/Los_Angeles
+          examples:
+          - America/Los_Angeles
+        user_location:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Location
+          description: "\n        String indicating the user's coarse location in the format: city, region_code, country_name.\n        On the web UI, this is inferred from the browser's location.\n        Default: \"San Francisco, CA, US\".\n        "
+          default: San Francisco, CA, US
+          examples:
+          - San Francisco, CA, US
+        skip_email:
+          type: boolean
+          title: Skip Email
+          description: "\n        If true, email notifications will be skipped and only webhook notifications will be sent.\n        Email subscriptions will still be stored but no emails will be sent.\n        Default: true (sends webhooks only).\n        "
+          default: true
+          examples:
+          - true
+        webhook_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Webhook Url
+          description: Optional webhook URL to receive updates for this scout. Creates a webhook subscription for the calling user using webhook_format.
+          examples:
+          - null
+        webhook_format:
+          type: string
+          enum:
+          - scout
+          - slack
+          - zapier
+          title: Webhook Format
+          description: Webhook payload format to use when webhook_url is provided. Slack incoming webhook URLs require 'slack'.
+          default: scout
+          examples:
+          - scout
+        is_public:
+          type: boolean
+          title: Is Public
+          description: "\n        Whether the scout is publicly accessible (true) or private (false).\n        Public scouts can be accessed by anyone via the UUID link.\n        Private scouts can only be accessed by the creator.\n        Default: false (private).\n        "
+          default: false
+      type: object
+      required:
+      - query
+      title: CreateScoutRequestAPI
+    DeveloperReplayStats:
+      properties:
+        num_tool_calls:
+          type: integer
+          title: Num Tool Calls
+          default: 0
+        num_mcp_tool_calls:
+          type: integer
+          title: Num Mcp Tool Calls
+          default: 0
+        num_webpages_read:
+          type: integer
+          title: Num Webpages Read
+          default: 0
+        num_navigator_steps:
+          type: integer
+          title: Num Navigator Steps
+          default: 0
+        num_websites_visited:
+          type: integer
+          title: Num Websites Visited
+          default: 0
+        sec_saved:
+          type: integer
+          title: Sec Saved
+          default: 0
+      type: object
+      title: DeveloperReplayStats
+    ScoutsSummary:
+      properties:
+        active:
+          type: integer
+          title: Active
+          description: Number of active scouts
+        paused:
+          type: integer
+          title: Paused
+          description: Number of paused scouts
+        done:
+          type: integer
+          title: Done
+          description: Number of completed scouts
+      type: object
+      required:
+      - active
+      - paused
+      - done
+      title: ScoutsSummary
+      description: Summary counts of scouts by status.
+    ScoutListResponse:
+      properties:
+        scouts:
+          items:
+            $ref: '#/components/schemas/ScoutListItem'
+          type: array
+          title: Scouts
+        total:
+          type: integer
+          title: Total
+          description: Total count of all scouts (active + paused + done)
+          default: 0
+        filtered_total:
+          type: integer
+          title: Filtered Total
+          description: Count of scouts matching the current filter
+          default: 0
+        summary:
+          anyOf:
+          - $ref: '#/components/schemas/ScoutsSummary'
+          - type: 'null'
+          description: Counts by status
+        page_size:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Page Size
+          description: Requested page size (null if returning all)
+        has_more:
+          type: boolean
+          title: Has More
+          description: Whether more results exist after this page
+          default: false
+        prev_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev Cursor
+          description: Cursor for previous page
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+          description: Cursor for next page
+      type: object
+      required:
+      - scouts
+      title: ScoutListResponse
+    CreateScoutResponsePublic:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        query:
+          type: string
+          title: Query
+        query_object:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Query Object
+        display_name:
+          type: string
+          title: Display Name
+        next_run_timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Next Run Timestamp
+        user_timezone:
+          type: string
+          title: User Timezone
+        next_output_timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Next Output Timestamp
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+        paused_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Paused At
+        rejection_reason:
+          anyOf:
+          - $ref: '#/components/schemas/RejectionReason'
+          - type: 'null'
+        is_public:
+          type: boolean
+          title: Is Public
+          default: false
+        view_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: View Url
+          description: URL to view this scout's details in the API platform dashboard.
+        webhook_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Webhook Url
+          description: Optional webhook URL configured for this scout, if provided at creation time.
+        output_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Output Schema
+          description: JSON Schema for structured output, if configured
+          readOnly: true
+      type: object
+      required:
+      - id
+      - query
+      - display_name
+      - next_run_timestamp
+      - user_timezone
+      - next_output_timestamp
+      - created_at
+      - completed_at
+      - paused_at
+      - output_schema
+      title: CreateScoutResponsePublic
+      description: Public API response for scout creation. Excludes internal fields like llm_output.
+    GetScoutUpdatesPublicResponse:
+      properties:
+        updates:
+          items:
+            $ref: '#/components/schemas/DeveloperUpdate'
+          type: array
+          title: Updates
+        prev_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev Cursor
+          description: Cursor for previous page
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+          description: Cursor for next page
+      type: object
+      required:
+      - updates
+      title: GetScoutUpdatesPublicResponse
+      description: Public API response for scout updates. Excludes internal fields.
+    UsageResponse:
+      properties:
+        num_active_scouts:
+          type: integer
+          title: Num Active Scouts
+        active_scout_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Active Scout Ids
+        rate_limits:
+          $ref: '#/components/schemas/RateLimits'
+        navigator_rate_limits:
+          $ref: '#/components/schemas/NavigatorRateLimits'
+        activity:
+          $ref: '#/components/schemas/ActivityCounts'
+        n1_rate_limits:
+          $ref: '#/components/schemas/NavigatorRateLimits'
+          description: Deprecated alias of navigator_rate_limits; prefer navigator_rate_limits
+          deprecated: true
+          readOnly: true
+      type: object
+      required:
+      - num_active_scouts
+      - active_scout_ids
+      - rate_limits
+      - navigator_rate_limits
+      - activity
+      - n1_rate_limits
+      title: UsageResponse
+    RejectionReason:
+      type: string
+      enum:
+      - insufficient_prepaid_balance
+      - budget_exceeded
+      - subscription_inactive
+      title: RejectionReason
+    DeveloperUpdateWithScout:
+      properties:
+        id:
+          type: string
+          title: Id
+        scout_id:
+          type: string
+          title: Scout Id
+        scout_display_name:
+          type: string
+          title: Scout Display Name
+        timestamp:
+          type: integer
+          title: Timestamp
+          description: Milliseconds since epoch
+        content:
+          type: string
+          title: Content
+        citations:
+          items:
+            $ref: '#/components/schemas/Citation'
+          type: array
+          title: Citations
+        stats:
+          anyOf:
+          - $ref: '#/components/schemas/DeveloperReplayStats'
+          - type: 'null'
+        structured_result:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Structured Result
+        structured_output_status:
+          anyOf:
+          - type: string
+            enum:
+            - not_requested
+            - pending
+            - succeeded
+            - failed
+          - type: 'null'
+          title: Structured Output Status
+        header_image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Header Image Url
+      type: object
+      required:
+      - id
+      - scout_id
+      - scout_display_name
+      - timestamp
+      - content
+      title: DeveloperUpdateWithScout
+    PatchScoutRequestAPI:
+      properties:
+        query:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Query
+          description: String describing what to monitor in natural language
+        output_interval:
+          anyOf:
+          - type: integer
+            minimum: 1800
+          - type: 'null'
+          title: Output Interval
+          description: Interval in seconds between outputs (must be >= 1800)
+        user_timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Timezone
+          description: User's timezone (e.g. 'America/Los_Angeles')
+        user_location:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Location
+          description: User's coarse location (e.g. 'San Francisco, CA, US')
+        is_public:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Public
+          description: Whether the scout is publicly accessible
+        skip_email:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Skip Email
+          description: If true, email notifications will be skipped
+        output_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Output Schema
+          description: JSON Schema for structured output (replaces the scout's existing output schema)
+          examples:
+          - items:
+              properties:
+                headline:
+                  description: News headline
+                  type: string
+                summary:
+                  description: Brief summary
+                  type: string
+                source_url:
+                  description: URL for more details
+                  type: string
+              type: object
+            type: array
+        webhook_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Webhook Url
+          description: Webhook URL to receive updates (set to empty string to remove)
+        webhook_format:
+          anyOf:
+          - type: string
+            enum:
+            - scout
+            - slack
+            - zapier
+          - type: 'null'
+          title: Webhook Format
+          description: Webhook payload format to use when updating webhook_url. Defaults to 'scout' when omitted. Slack incoming webhook URLs require 'slack'. Only takes effect when webhook_url is also provided in the same request.
+          examples:
+          - scout
+      type: object
+      title: PatchScoutRequestAPI
+      description: 'Experimental: Partial update for a Scout via the Developer API.
+
+        Only provided fields will be updated; omitted fields remain unchanged.'
+    RateLimits:
+      properties:
+        requests_today:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Requests Today
+          description: API requests used today (None if unavailable)
+        daily_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Daily Limit
+          description: Daily request limit from AWS API Gateway usage plan (None if unavailable)
+        remaining_requests:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Remaining Requests
+          description: Remaining requests for today (None if unavailable)
+        reset_at:
+          type: string
+          title: Reset At
+          description: ISO 8601 timestamp for next midnight UTC
+        status:
+          type: string
+          enum:
+          - available
+          - unavailable
+          title: Status
+          description: Rate limit availability status
+      type: object
+      required:
+      - requests_today
+      - daily_limit
+      - remaining_requests
+      - reset_at
+      - status
+      title: RateLimits
+    Scout:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        query:
+          type: string
+          title: Query
+        query_object:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Query Object
+        display_name:
+          type: string
+          title: Display Name
+        next_run_timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Next Run Timestamp
+        user_timezone:
+          type: string
+          title: User Timezone
+        next_output_timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Next Output Timestamp
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+        paused_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Paused At
+        rejection_reason:
+          anyOf:
+          - $ref: '#/components/schemas/RejectionReason'
+          - type: 'null'
+        llm_output:
+          additionalProperties: true
+          type: object
+          title: Llm Output
+        is_public:
+          type: boolean
+          title: Is Public
+          default: true
+        connectors_config:
+          anyOf:
+          - $ref: '#/components/schemas/ConnectorsConfig'
+          - type: 'null'
+        last_update_timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Update Timestamp
+        update_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Update Count
+        is_subscribed:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Subscribed
+        is_creator:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Creator
+        creator_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Creator Id
+        creator_username:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Creator Username
+          description: Display name of the scout creator (first name from Clerk)
+        creator_image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Creator Image Url
+          description: Profile picture URL of the scout creator (from Clerk payload)
+        unread_update_count:
+          type: integer
+          title: Unread Update Count
+          description: Number of unread updates with findings for this user
+          default: 0
+        has_unread_updates:
+          type: boolean
+          title: Has Unread Updates
+          description: Whether this scout has unread updates with findings
+          default: false
+        feedback_guidelines:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feedback Guidelines
+        connected_services:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Connected Services
+          description: Active connector service names for the scout creator (e.g. ['gmail', 'slack'])
+        has_subscribers:
+          type: boolean
+          title: Has Subscribers
+          description: Whether this scout has any confirmed non-creator subscribers
+          default: false
+        subscriber_count:
+          type: integer
+          title: Subscriber Count
+          description: Number of confirmed subscribers for this scout
+          default: 0
+        subscriber_names:
+          items:
+            type: string
+          type: array
+          title: Subscriber Names
+          description: Display names of up to 3 confirmed subscribers (for avatar rendering)
+        subscriber_avatars:
+          items:
+            additionalProperties:
+              anyOf:
+              - type: string
+              - type: 'null'
+            type: object
+          type: array
+          title: Subscriber Avatars
+          description: Avatar info for up to 3 confirmed subscribers [{name, image_url}]
+        unique_view_count:
+          type: integer
+          title: Unique View Count
+          description: Number of unique visitors to this scout's page
+          default: 0
+        artifacts:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Artifacts
+          description: Artifacts generated by this scout [{id, url, file_type, filename, created_at, updated_at}]
+      type: object
+      required:
+      - id
+      - query
+      - display_name
+      - next_run_timestamp
+      - user_timezone
+      - next_output_timestamp
+      - created_at
+      - completed_at
+      - paused_at
+      - llm_output
+      title: Scout
+    ConnectorsConfigPayload:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether connectors are enabled for this scout
+      type: object
+      required:
+      - enabled
+      title: ConnectorsConfigPayload
+    NavigatorRateLimits:
+      properties:
+        requests_today:
+          type: integer
+          title: Requests Today
+          description: Navigator API requests used today (since midnight UTC)
+        daily_limit:
+          type: integer
+          title: Daily Limit
+          description: Daily Navigator request limit (resets at midnight UTC)
+        remaining_requests:
+          type: integer
+          title: Remaining Requests
+          description: Remaining Navigator requests for today (daily_limit - requests_today)
+        reset_at:
+          type: string
+          title: Reset At
+          description: ISO 8601 timestamp for next midnight UTC
+        per_second_limit:
+          type: integer
+          title: Per Second Limit
+          description: Configured per-second Navigator request limit
+      type: object
+      required:
+      - requests_today
+      - daily_limit
+      - remaining_requests
+      - reset_at
+      - per_second_limit
+      title: NavigatorRateLimits
+      description: Rate limits for the Navigator (chat completions) endpoint.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: x-api-key
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Use Authorization: Bearer <api_key>'

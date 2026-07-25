@@ -1,0 +1,509 @@
+openapi: 3.1.0
+info:
+  title: Fast Browsing API
+  version: 0.1.0
+servers:
+- url: https://api.yutori.com
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: Browsing
+paths:
+  /v1/browsing/tasks:
+    post:
+      tags:
+      - Browsing
+      summary: Create A Task
+      description: Launches a website navigation agent to execute the task on a cloud browser.
+      operationId: agent_run_endpoint_v1_browsing_tasks_post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentRunRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentRunResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Browsing
+      summary: List Tasks
+      description: List browsing tasks for the authenticated user.
+      operationId: list_browsing_tasks_v1_browsing_tasks_get
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - enum:
+            - running
+            - succeeded
+            - failed
+            type: string
+          - type: 'null'
+          description: 'Filter by task status: running, succeeded, or failed.'
+          title: Status
+        description: 'Filter by task status: running, succeeded, or failed.'
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Page Size
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cursor
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/browsing/tasks/{id}:
+    get:
+      tags:
+      - Browsing
+      summary: Get Agent Run Status
+      description: Returns the current status (queued, running, succeeded, failed) and any results if completed.
+      operationId: get_agent_run_status_v1_browsing_tasks__id__get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentRunResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/browsing/tasks/{id}/trajectory:
+    get:
+      tags:
+      - Browsing
+      summary: Download Task Trajectory
+      description: Downloads the trajectory for a completed browsing task.
+      operationId: get_task_trajectory_v1_browsing_tasks__id__trajectory_get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Id
+      - name: output_type
+        in: query
+        required: false
+        schema:
+          enum:
+          - json
+          - zip
+          type: string
+          description: 'Output format: ''json'' or ''zip'''
+          default: json
+          title: Output Type
+        description: 'Output format: ''json'' or ''zip'''
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    RejectionReason:
+      type: string
+      enum:
+      - insufficient_prepaid_balance
+      - budget_exceeded
+      - subscription_inactive
+      title: RejectionReason
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TaskListResponse:
+      properties:
+        tasks:
+          items:
+            $ref: '#/components/schemas/TaskListItem'
+          type: array
+          title: Tasks
+        total:
+          type: integer
+          title: Total
+          description: Total count of all tasks (running + succeeded + failed)
+          default: 0
+        filtered_total:
+          type: integer
+          title: Filtered Total
+          description: Count of tasks matching the current filter
+          default: 0
+        summary:
+          anyOf:
+          - $ref: '#/components/schemas/TaskListSummary'
+          - type: 'null'
+          description: Counts by status
+        page_size:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Page Size
+          description: Requested page size (null if returning all)
+        has_more:
+          type: boolean
+          title: Has More
+          description: Whether more results exist after this page
+          default: false
+        prev_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev Cursor
+          description: Cursor for previous page
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+          description: Cursor for next page
+      type: object
+      required:
+      - tasks
+      title: TaskListResponse
+    AgentRunRequest:
+      properties:
+        output_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Output Schema
+          description: JSON Schema for structured output. Takes precedence over task_spec if both provided.
+          examples:
+          - items:
+              properties:
+                name:
+                  description: Full name of the employee
+                  type: string
+                title:
+                  description: Job title of the employee
+                  type: string
+              type: object
+            type: array
+        task_spec:
+          anyOf:
+          - $ref: '#/components/schemas/TaskSpec'
+          - type: 'null'
+          description: Deprecated but still supported. Use output_schema instead.
+          deprecated: true
+        used_deprecated_task_spec:
+          type: boolean
+          title: Used Deprecated Task Spec
+          default: false
+          hidden: true
+        task:
+          type: string
+          title: Task
+          description: String describing the browsing task in natural language.
+          examples:
+          - Give me a list of all employees (names and titles) of Yutori.
+        start_url:
+          type: string
+          title: Start Url
+          description: URL to open before running the task
+          examples:
+          - https://yutori.com
+        max_steps:
+          anyOf:
+          - type: integer
+            maximum: 100
+            minimum: 2
+          - type: 'null'
+          title: Max Steps
+          description: Maximum number of steps the agent can take
+          examples:
+          - 50
+        agent:
+          anyOf:
+          - type: string
+          - type: 'null'
+          enum:
+          - navigator-n1.5-latest
+          - claude-sonnet-4-5-computer-use-2025-01-24
+          - null
+          title: Agent
+          description: Which agent to use for the browsing task. Defaults to navigator-n1.5-latest.
+          examples:
+          - navigator-n1.5-latest
+        require_auth:
+          type: boolean
+          title: Require Auth
+          description: Hint that this task is likely to involve authentication (e.g. logging in or entering passwords). When true, the system will prefer an auth-optimized browser provider when available.
+          default: false
+        browser:
+          anyOf:
+          - type: string
+            enum:
+            - cloud
+            - local
+          - type: 'null'
+          title: Browser
+          description: Where to run the browser. 'cloud' (default) uses Yutori's cloud browser. 'local' uses the user's desktop app (Yutori Local) with their existing logged-in sessions. Requires the desktop app to be running.
+        webhook_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Webhook Url
+          description: Optional webhook URL to receive the agent.run result for the calling user using webhook_format.
+          examples:
+          - https://example.com/webhook
+        webhook_format:
+          type: string
+          enum:
+          - scout
+          - slack
+          - zapier
+          title: Webhook Format
+          description: Webhook payload format to use when webhook_url is provided. Slack incoming webhook URLs require 'slack'.
+          default: scout
+          examples:
+          - scout
+      type: object
+      required:
+      - task
+      - start_url
+      title: AgentRunRequest
+    TaskSpec:
+      properties:
+        output_schema:
+          anyOf:
+          - $ref: '#/components/schemas/JsonSchemaSpec'
+          - type: 'null'
+      type: object
+      title: TaskSpec
+    TaskListItem:
+      properties:
+        task_id:
+          type: string
+          title: Task Id
+          description: Unique identifier for this task
+        query:
+          type: string
+          title: Query
+          description: Task or research query submitted by the caller
+        status:
+          type: string
+          enum:
+          - running
+          - succeeded
+          - failed
+          title: Status
+          description: 'Lightweight task status for list views, derived from stored task state: ''succeeded'' (results are retrievable), ''failed'' (terminal with no retrievable results), or ''running'' (everything else). Because it is computed without a live workflow lookup, ''running'' also covers queued tasks and the brief window before a finished workflow is reconciled in the database. Call GET /v1/{browsing,research}/tasks/{id} for the authoritative queued/running/succeeded/failed status of a single task.'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the task was created
+        view_url:
+          type: string
+          title: View Url
+          description: URL to view this task in the API platform dashboard
+        rejection_reason:
+          anyOf:
+          - $ref: '#/components/schemas/RejectionReason'
+          - type: 'null'
+          description: If status is 'failed', the specific billing reason for rejection when available
+      type: object
+      required:
+      - task_id
+      - query
+      - status
+      - created_at
+      - view_url
+      title: TaskListItem
+      description: Lightweight one-time task metadata for developer API list endpoints.
+    TaskListSummary:
+      properties:
+        running:
+          type: integer
+          title: Running
+          description: Number of tasks still running
+        succeeded:
+          type: integer
+          title: Succeeded
+          description: Number of tasks with retrievable results
+        failed:
+          type: integer
+          title: Failed
+          description: Number of terminal tasks without retrievable results
+      type: object
+      required:
+      - running
+      - succeeded
+      - failed
+      title: TaskListSummary
+      description: Summary counts of one-time tasks by lightweight list status.
+    JsonSchemaSpec:
+      properties:
+        type:
+          type: string
+          const: json
+          title: Type
+          default: json
+        json_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Json Schema
+          description: A JSON Schema object defining the structure
+      type: object
+      title: JsonSchemaSpec
+    AgentRunResponse:
+      properties:
+        task_id:
+          type: string
+          title: Task Id
+          description: Unique identifier for this browsing task
+        view_url:
+          type: string
+          title: View Url
+        status:
+          type: string
+          enum:
+          - queued
+          - running
+          - succeeded
+          - failed
+          title: Status
+        result:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Result
+        paused:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Paused
+        structured_result:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Structured Result
+          description: If an output schema was provided, the result formatted as JSON matching that schema
+        structured_output_status:
+          anyOf:
+          - type: string
+            enum:
+            - not_requested
+            - pending
+            - succeeded
+            - failed
+          - type: 'null'
+          title: Structured Output Status
+          description: Whether structured output was requested, is still pending, succeeded, or failed
+        webhook_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Webhook Url
+          description: Echoes the webhook URL configured for this agent.run request, if provided.
+        rejection_reason:
+          anyOf:
+          - $ref: '#/components/schemas/RejectionReason'
+          - type: 'null'
+          description: If status is 'failed', the specific billing reason for rejection
+      type: object
+      required:
+      - task_id
+      - view_url
+      - status
+      title: AgentRunResponse
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: x-api-key
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Use Authorization: Bearer <api_key>'

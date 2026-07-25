@@ -1,0 +1,586 @@
+openapi: 3.1.0
+info:
+  title: Fast Browsing Research API
+  version: 0.1.0
+servers:
+- url: https://api.yutori.com
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: Research
+paths:
+  /v1/research/tasks:
+    post:
+      tags:
+      - Research
+      summary: Create A Task
+      description: Launches a one-time research task on the web.
+      operationId: create_research_task_v1_research_tasks_post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateResearchTaskRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResearchTaskResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Research
+      summary: List Tasks
+      description: List research tasks for the authenticated user.
+      operationId: list_research_tasks_v1_research_tasks_get
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - enum:
+            - running
+            - succeeded
+            - failed
+            type: string
+          - type: 'null'
+          description: 'Filter by task status: running, succeeded, or failed.'
+          title: Status
+        description: 'Filter by task status: running, succeeded, or failed.'
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Page Size
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cursor
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/research/tasks/{task_id}:
+    get:
+      tags:
+      - Research
+      summary: Get Status And Results
+      description: Returns the current status (queued, running, succeeded, failed) and any results if completed.
+      operationId: get_research_task_status_v1_research_tasks__task_id__get
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Task Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResearchTaskStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    RejectionReason:
+      type: string
+      enum:
+      - insufficient_prepaid_balance
+      - budget_exceeded
+      - subscription_inactive
+      title: RejectionReason
+    ResearchTaskStatusResponse:
+      properties:
+        task_id:
+          type: string
+          title: Task Id
+          description: Unique identifier for this research task
+        view_url:
+          type: string
+          title: View Url
+          description: URL to view task progress and results
+        status:
+          type: string
+          enum:
+          - queued
+          - running
+          - succeeded
+          - failed
+          title: Status
+          description: Current status of the research task
+        result:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Result
+          description: Research results in markdown format if completed
+        structured_result:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Structured Result
+          description: If an output schema was provided, the result formatted as JSON matching that schema
+        structured_output_status:
+          anyOf:
+          - type: string
+            enum:
+            - not_requested
+            - pending
+            - succeeded
+            - failed
+          - type: 'null'
+          title: Structured Output Status
+          description: Whether structured output was requested, is still pending, succeeded, or failed
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+          description: When the task was created
+        updates:
+          items:
+            $ref: '#/components/schemas/DeveloperUpdate'
+          type: array
+          title: Updates
+          description: List of updates/results from the research task
+        rejection_reason:
+          anyOf:
+          - $ref: '#/components/schemas/RejectionReason'
+          - type: 'null'
+          description: If status is 'failed', the specific billing reason for rejection
+      type: object
+      required:
+      - task_id
+      - view_url
+      - status
+      title: ResearchTaskStatusResponse
+      description: Response for getting research task status and results.
+    JsonSchemaSpec:
+      properties:
+        type:
+          type: string
+          const: json
+          title: Type
+          default: json
+        json_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Json Schema
+          description: A JSON Schema object defining the structure
+      type: object
+      title: JsonSchemaSpec
+    CreateResearchTaskRequest:
+      properties:
+        output_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Output Schema
+          description: JSON Schema for structured output. Takes precedence over task_spec if both provided.
+          examples:
+          - items:
+              properties:
+                title:
+                  description: Title of the development
+                  type: string
+                summary:
+                  description: Brief summary
+                  type: string
+                source_url:
+                  description: URL for more details
+                  type: string
+              type: object
+            type: array
+        task_spec:
+          anyOf:
+          - $ref: '#/components/schemas/TaskSpec'
+          - type: 'null'
+          description: Deprecated but still supported. Use output_schema instead.
+          deprecated: true
+        used_deprecated_task_spec:
+          type: boolean
+          title: Used Deprecated Task Spec
+          default: false
+          hidden: true
+        query:
+          type: string
+          title: Query
+          description: "\n        String describing the research task in natural language.\n        "
+          examples:
+          - What are the latest developments in quantum computing from the past week?
+        user_timezone:
+          type: string
+          title: User Timezone
+          description: User's timezone for contextual awareness (e.g. 'America/Los_Angeles')
+          default: America/Los_Angeles
+          examples:
+          - America/Los_Angeles
+        user_location:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Location
+          description: 'User''s coarse location in the format: city, region_code, country_name'
+          default: San Francisco, CA, US
+          examples:
+          - San Francisco, CA, US
+        skip_email:
+          type: boolean
+          title: Skip Email
+          description: "\n        If true, email notifications will be skipped and only webhook notifications will be sent.\n        Default: true (sends webhooks only).\n        "
+          default: true
+          examples:
+          - true
+        webhook_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Webhook Url
+          description: Optional webhook URL to receive results when the research task completes
+          examples:
+          - https://example.com/webhook
+        webhook_format:
+          type: string
+          enum:
+          - scout
+          - slack
+          - zapier
+          title: Webhook Format
+          description: Webhook payload format. Slack incoming webhook URLs require 'slack'.
+          default: scout
+          examples:
+          - scout
+      type: object
+      required:
+      - query
+      title: CreateResearchTaskRequest
+    Citation:
+      properties:
+        id:
+          type: string
+          title: Id
+        url:
+          type: string
+          title: Url
+        preview_data:
+          additionalProperties: true
+          type: object
+          title: Preview Data
+      type: object
+      required:
+      - id
+      - url
+      title: Citation
+    TaskListResponse:
+      properties:
+        tasks:
+          items:
+            $ref: '#/components/schemas/TaskListItem'
+          type: array
+          title: Tasks
+        total:
+          type: integer
+          title: Total
+          description: Total count of all tasks (running + succeeded + failed)
+          default: 0
+        filtered_total:
+          type: integer
+          title: Filtered Total
+          description: Count of tasks matching the current filter
+          default: 0
+        summary:
+          anyOf:
+          - $ref: '#/components/schemas/TaskListSummary'
+          - type: 'null'
+          description: Counts by status
+        page_size:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Page Size
+          description: Requested page size (null if returning all)
+        has_more:
+          type: boolean
+          title: Has More
+          description: Whether more results exist after this page
+          default: false
+        prev_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev Cursor
+          description: Cursor for previous page
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+          description: Cursor for next page
+      type: object
+      required:
+      - tasks
+      title: TaskListResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TaskSpec:
+      properties:
+        output_schema:
+          anyOf:
+          - $ref: '#/components/schemas/JsonSchemaSpec'
+          - type: 'null'
+      type: object
+      title: TaskSpec
+    DeveloperUpdate:
+      properties:
+        id:
+          type: string
+          title: Id
+        timestamp:
+          type: integer
+          title: Timestamp
+        content:
+          type: string
+          title: Content
+        citations:
+          items:
+            $ref: '#/components/schemas/Citation'
+          type: array
+          title: Citations
+        stats:
+          anyOf:
+          - $ref: '#/components/schemas/DeveloperReplayStats'
+          - type: 'null'
+        structured_result:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Structured Result
+        structured_output_status:
+          anyOf:
+          - type: string
+            enum:
+            - not_requested
+            - pending
+            - succeeded
+            - failed
+          - type: 'null'
+          title: Structured Output Status
+        header_image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Header Image Url
+      type: object
+      required:
+      - id
+      - timestamp
+      - content
+      title: DeveloperUpdate
+    TaskListSummary:
+      properties:
+        running:
+          type: integer
+          title: Running
+          description: Number of tasks still running
+        succeeded:
+          type: integer
+          title: Succeeded
+          description: Number of tasks with retrievable results
+        failed:
+          type: integer
+          title: Failed
+          description: Number of terminal tasks without retrievable results
+      type: object
+      required:
+      - running
+      - succeeded
+      - failed
+      title: TaskListSummary
+      description: Summary counts of one-time tasks by lightweight list status.
+    TaskListItem:
+      properties:
+        task_id:
+          type: string
+          title: Task Id
+          description: Unique identifier for this task
+        query:
+          type: string
+          title: Query
+          description: Task or research query submitted by the caller
+        status:
+          type: string
+          enum:
+          - running
+          - succeeded
+          - failed
+          title: Status
+          description: 'Lightweight task status for list views, derived from stored task state: ''succeeded'' (results are retrievable), ''failed'' (terminal with no retrievable results), or ''running'' (everything else). Because it is computed without a live workflow lookup, ''running'' also covers queued tasks and the brief window before a finished workflow is reconciled in the database. Call GET /v1/{browsing,research}/tasks/{id} for the authoritative queued/running/succeeded/failed status of a single task.'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the task was created
+        view_url:
+          type: string
+          title: View Url
+          description: URL to view this task in the API platform dashboard
+        rejection_reason:
+          anyOf:
+          - $ref: '#/components/schemas/RejectionReason'
+          - type: 'null'
+          description: If status is 'failed', the specific billing reason for rejection when available
+      type: object
+      required:
+      - task_id
+      - query
+      - status
+      - created_at
+      - view_url
+      title: TaskListItem
+      description: Lightweight one-time task metadata for developer API list endpoints.
+    DeveloperReplayStats:
+      properties:
+        num_tool_calls:
+          type: integer
+          title: Num Tool Calls
+          default: 0
+        num_mcp_tool_calls:
+          type: integer
+          title: Num Mcp Tool Calls
+          default: 0
+        num_webpages_read:
+          type: integer
+          title: Num Webpages Read
+          default: 0
+        num_navigator_steps:
+          type: integer
+          title: Num Navigator Steps
+          default: 0
+        num_websites_visited:
+          type: integer
+          title: Num Websites Visited
+          default: 0
+        sec_saved:
+          type: integer
+          title: Sec Saved
+          default: 0
+      type: object
+      title: DeveloperReplayStats
+    CreateResearchTaskResponse:
+      properties:
+        task_id:
+          type: string
+          title: Task Id
+          description: Unique identifier for this research task
+        view_url:
+          type: string
+          title: View Url
+          description: URL to view task progress and results
+        status:
+          type: string
+          enum:
+          - queued
+          - running
+          - succeeded
+          - failed
+          title: Status
+          description: Current status of the research task
+        webhook_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Webhook Url
+          description: Echoes the webhook URL configured for this task, if provided
+      type: object
+      required:
+      - task_id
+      - view_url
+      - status
+      title: CreateResearchTaskResponse
+      description: Response for creating a research task.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: x-api-key
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Use Authorization: Bearer <api_key>'

@@ -1,0 +1,35 @@
+openapi: 3.1.0
+info:
+  title: Fast Browsing Health API
+  version: 0.1.0
+servers:
+- url: https://api.yutori.com
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: Health
+paths:
+  /v1/health:
+    get:
+      summary: Health
+      operationId: health_v1_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Health
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: x-api-key
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Use Authorization: Bearer <api_key>'

@@ -1,0 +1,607 @@
+openapi: 3.1.0
+info:
+  title: Fast Browsing Chat Completions API
+  version: 0.1.0
+servers:
+- url: https://api.yutori.com
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: Chat Completions
+paths:
+  /v1/chat/completions:
+    post:
+      tags:
+      - Chat Completions
+      summary: Create Chat Completion
+      operationId: create_chat_completion_v1_chat_completions_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatCompletionRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - BearerAuth: []
+components:
+  schemas:
+    ChatCompletionFunctionMessageParam:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content
+        name:
+          type: string
+          title: Name
+        role:
+          type: string
+          const: function
+          title: Role
+      additionalProperties: true
+      type: object
+      required:
+      - content
+      - name
+      - role
+      title: ChatCompletionFunctionMessageParam
+    ChatCompletionToolMessageParam:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - items:
+              $ref: '#/components/schemas/ChatCompletionContentPartTextParam'
+            type: array
+          title: Content
+        role:
+          type: string
+          const: tool
+          title: Role
+        tool_call_id:
+          type: string
+          title: Tool Call Id
+      additionalProperties: true
+      type: object
+      required:
+      - content
+      - role
+      - tool_call_id
+      title: ChatCompletionToolMessageParam
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ImageURL:
+      properties:
+        url:
+          type: string
+          title: Url
+        detail:
+          type: string
+          enum:
+          - auto
+          - low
+          - high
+          title: Detail
+      additionalProperties: true
+      type: object
+      required:
+      - url
+      title: ImageURL
+    ChatCompletionMessageCustomToolCallParam:
+      properties:
+        id:
+          type: string
+          title: Id
+        custom:
+          $ref: '#/components/schemas/Custom'
+        type:
+          type: string
+          const: custom
+          title: Type
+      additionalProperties: true
+      type: object
+      required:
+      - id
+      - custom
+      - type
+      title: ChatCompletionMessageCustomToolCallParam
+    ChatCompletionUserMessageParam:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/ChatCompletionContentPartTextParam'
+              - $ref: '#/components/schemas/ChatCompletionContentPartImageParam'
+              - $ref: '#/components/schemas/ChatCompletionContentPartInputAudioParam'
+              - $ref: '#/components/schemas/File'
+            type: array
+          title: Content
+        role:
+          type: string
+          const: user
+          title: Role
+        name:
+          type: string
+          title: Name
+      additionalProperties: true
+      type: object
+      required:
+      - content
+      - role
+      title: ChatCompletionUserMessageParam
+    Function:
+      properties:
+        arguments:
+          type: string
+          title: Arguments
+        name:
+          type: string
+          title: Name
+      additionalProperties: true
+      type: object
+      required:
+      - arguments
+      - name
+      title: Function
+    ChatCompletionContentPartTextParam:
+      properties:
+        text:
+          type: string
+          title: Text
+        type:
+          type: string
+          const: text
+          title: Type
+      additionalProperties: true
+      type: object
+      required:
+      - text
+      - type
+      title: ChatCompletionContentPartTextParam
+    ChatCompletionToolImageMessageParam:
+      properties:
+        role:
+          type: string
+          const: tool
+          title: Role
+        content:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/ChatCompletionContentPartTextParam'
+              - $ref: '#/components/schemas/ChatCompletionContentPartImageParam'
+            type: array
+          title: Content
+        tool_call_id:
+          type: string
+          title: Tool Call Id
+      additionalProperties: true
+      type: object
+      required:
+      - role
+      - content
+      - tool_call_id
+      title: ChatCompletionToolImageMessageParam
+    ChatCompletionDeveloperMessageParam:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - items:
+              $ref: '#/components/schemas/ChatCompletionContentPartTextParam'
+            type: array
+          title: Content
+        role:
+          type: string
+          const: developer
+          title: Role
+        name:
+          type: string
+          title: Name
+      additionalProperties: true
+      type: object
+      required:
+      - content
+      - role
+      title: ChatCompletionDeveloperMessageParam
+    ChatCompletionContentPartImageParam:
+      properties:
+        image_url:
+          $ref: '#/components/schemas/ImageURL'
+        type:
+          type: string
+          const: image_url
+          title: Type
+      additionalProperties: true
+      type: object
+      required:
+      - image_url
+      - type
+      title: ChatCompletionContentPartImageParam
+    File:
+      properties:
+        file:
+          $ref: '#/components/schemas/FileFile'
+        type:
+          type: string
+          const: file
+          title: Type
+      additionalProperties: true
+      type: object
+      required:
+      - file
+      - type
+      title: File
+    Custom:
+      properties:
+        input:
+          type: string
+          title: Input
+        name:
+          type: string
+          title: Name
+      additionalProperties: true
+      type: object
+      required:
+      - input
+      - name
+      title: Custom
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Audio:
+      properties:
+        id:
+          type: string
+          title: Id
+      additionalProperties: true
+      type: object
+      required:
+      - id
+      title: Audio
+    FileFile:
+      properties:
+        file_data:
+          type: string
+          title: File Data
+        file_id:
+          type: string
+          title: File Id
+        filename:
+          type: string
+          title: Filename
+      additionalProperties: true
+      type: object
+      title: FileFile
+    ChatCompletionContentPartRefusalParam:
+      properties:
+        refusal:
+          type: string
+          title: Refusal
+        type:
+          type: string
+          const: refusal
+          title: Type
+      additionalProperties: true
+      type: object
+      required:
+      - refusal
+      - type
+      title: ChatCompletionContentPartRefusalParam
+    ChatCompletionContentPartInputAudioParam:
+      properties:
+        input_audio:
+          $ref: '#/components/schemas/InputAudio'
+        type:
+          type: string
+          const: input_audio
+          title: Type
+      additionalProperties: true
+      type: object
+      required:
+      - input_audio
+      - type
+      title: ChatCompletionContentPartInputAudioParam
+    ChatCompletionObservationMessageParam:
+      properties:
+        role:
+          type: string
+          const: observation
+          title: Role
+        content:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/ChatCompletionContentPartTextParam'
+              - $ref: '#/components/schemas/ChatCompletionContentPartImageParam'
+            type: array
+          title: Content
+        name:
+          type: string
+          title: Name
+      additionalProperties: true
+      type: object
+      required:
+      - role
+      - content
+      title: ChatCompletionObservationMessageParam
+    InputAudio:
+      properties:
+        data:
+          type: string
+          title: Data
+        format:
+          type: string
+          enum:
+          - wav
+          - mp3
+          title: Format
+      additionalProperties: true
+      type: object
+      required:
+      - data
+      - format
+      title: InputAudio
+    ChatCompletionAssistantMessageParam:
+      properties:
+        role:
+          type: string
+          const: assistant
+          title: Role
+        audio:
+          anyOf:
+          - $ref: '#/components/schemas/Audio'
+          - type: 'null'
+        content:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/ChatCompletionContentPartTextParam'
+              - $ref: '#/components/schemas/ChatCompletionContentPartRefusalParam'
+            type: array
+          - type: 'null'
+          title: Content
+        function_call:
+          anyOf:
+          - $ref: '#/components/schemas/FunctionCall'
+          - type: 'null'
+        name:
+          type: string
+          title: Name
+        refusal:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Refusal
+        tool_calls:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/ChatCompletionMessageFunctionToolCallParam'
+            - $ref: '#/components/schemas/ChatCompletionMessageCustomToolCallParam'
+          type: array
+          title: Tool Calls
+      additionalProperties: true
+      type: object
+      required:
+      - role
+      title: ChatCompletionAssistantMessageParam
+    FunctionCall:
+      properties:
+        arguments:
+          type: string
+          title: Arguments
+        name:
+          type: string
+          title: Name
+      additionalProperties: true
+      type: object
+      required:
+      - arguments
+      - name
+      title: FunctionCall
+    ChatCompletionMessageFunctionToolCallParam:
+      properties:
+        id:
+          type: string
+          title: Id
+        function:
+          $ref: '#/components/schemas/Function'
+        type:
+          type: string
+          const: function
+          title: Type
+      additionalProperties: true
+      type: object
+      required:
+      - id
+      - function
+      - type
+      title: ChatCompletionMessageFunctionToolCallParam
+    ChatCompletionSystemMessageParam:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - items:
+              $ref: '#/components/schemas/ChatCompletionContentPartTextParam'
+            type: array
+          title: Content
+        role:
+          type: string
+          const: system
+          title: Role
+        name:
+          type: string
+          title: Name
+      additionalProperties: true
+      type: object
+      required:
+      - content
+      - role
+      title: ChatCompletionSystemMessageParam
+    ChatCompletionRequest:
+      properties:
+        messages:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/ChatCompletionDeveloperMessageParam'
+            - $ref: '#/components/schemas/ChatCompletionSystemMessageParam'
+            - $ref: '#/components/schemas/ChatCompletionUserMessageParam'
+            - $ref: '#/components/schemas/ChatCompletionAssistantMessageParam'
+            - $ref: '#/components/schemas/ChatCompletionToolMessageParam'
+            - $ref: '#/components/schemas/ChatCompletionFunctionMessageParam'
+            - $ref: '#/components/schemas/ChatCompletionToolImageMessageParam'
+            - $ref: '#/components/schemas/ChatCompletionObservationMessageParam'
+          type: array
+          title: Messages
+        model:
+          type: string
+          enum:
+          - n1.5-latest
+          - n1.5-20260428
+          title: Model
+        max_completion_tokens:
+          type: integer
+          title: Max Completion Tokens
+          default: 1572
+        temperature:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Temperature
+          default: 0.3
+        top_p:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Top P
+        repetition_penalty:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Repetition Penalty
+          description: Penalizes token repetition. 1.0 = no penalty, >1.0 = less repetition. Only supported by vLLM-backed models.
+        presence_penalty:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Presence Penalty
+        frequency_penalty:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Frequency Penalty
+        tools:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Tools
+          description: Additional tools to extend the default browser action tools. Tools are merged with the built-in browser actions (left_click, scroll, type, etc.).
+        tool_choice:
+          anyOf:
+          - type: string
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Tool Choice
+          description: Controls whether tool calls are parsed from the response. Model always decides whether to call a tool. 'none' treats the response as text-only, but tool calls may be present inside `<tool_call>` tags, 'auto' (default) parses tool calls automatically as `tool_calls` list in response.
+          default: auto
+        response_format:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Response Format
+          description: An object specifying the format that the model must output.
+        tool_set:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tool Set
+          description: 'Named tool set (n1.5+ models only). ''browser_tools_core-20260403'' (default): coordinate-based tools. ''browser_tools_expanded-20260403'': adds extract_elements, find, set_element_value, execute_js.'
+        disable_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Disable Tools
+          description: List of tool names to remove from the selected tool set (n1.5+ models only).
+        json_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Json Schema
+          description: JSON Schema for structured output (n1.5+ models only). Appended to your task message. Model returns JSON in ```json fences, parsed and returned as 'parsed_json' in the response.
+        prev_request_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev Request Id
+          description: The `request_id` returned by the previous Navigator call in this conversation. Echo it back on each subsequent call to link the calls into one conversation for usage reporting.
+      additionalProperties: true
+      type: object
+      title: ChatCompletionRequest
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: x-api-key
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Use Authorization: Bearer <api_key>'
