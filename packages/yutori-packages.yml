@@ -1,0 +1,27 @@
+generated: '2026-07-21'
+method: searched
+source: https://pypi.org/project/yutori/
+packages:
+- language: python
+  registry: pypi
+  name: yutori
+  version: 0.8.1
+  url: https://pypi.org/project/yutori/
+  install: pip install yutori
+  repository: https://github.com/yutori-ai/yutori-sdk-python
+  description: Official Python SDK for the Yutori API
+  official: true
+- language: python
+  registry: pypi
+  name: langchain-yutori
+  url: https://pypi.org/project/langchain-yutori/
+  install: pip install langchain-yutori
+  repository: https://github.com/yutori-ai/langchain-yutori
+  description: LangChain integration for the Yutori API
+  official: true
+- language: python
+  registry: github
+  name: yutori-mcp
+  url: https://github.com/yutori-ai/yutori-mcp
+  description: Yutori MCP server (Python)
+  official: true

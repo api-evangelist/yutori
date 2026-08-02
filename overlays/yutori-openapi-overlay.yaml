@@ -1,0 +1,29 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Yutori API
+  version: 1.0.0
+extends: openapi/yutori-openapi-original.json
+actions:
+- target: $.info
+  update:
+    title: Yutori API
+    description: >-
+      Yutori provides AI web agents as an API — browser automation with the
+      Navigator (n1.5) computer-use model, always-on web monitoring with Scouts,
+      one-time web Research tasks, and an OpenAI-compatible Chat Completions
+      endpoint. Authenticated with an API key presented as a bearer token.
+    x-apievangelist-rating: 4
+    x-provider: Yutori
+    x-docs: https://docs.yutori.com
+- target: $.servers
+  update:
+  - url: https://api.yutori.com
+    description: Production
+- target: $.info
+  update:
+    x-agent-native:
+      auth_recipe: https://yutori.com/auth.md
+      mcp_server: https://api.yutori.com/mcp
+      skill: https://yutori.com/.well-known/agent-skills/yutori-api/SKILL.md
+      llms_txt: https://docs.yutori.com/llms.txt
+      api_catalog: https://yutori.com/.well-known/api-catalog

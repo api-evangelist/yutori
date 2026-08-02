@@ -1,0 +1,12 @@
+{
+  "resource": "https://api.yutori.com",
+  "resource_name": "Yutori API",
+  "resource_documentation": "https://docs.yutori.com/authentication",
+  "resource_logo_uri": "https://yutori.com/icon-512.png",
+  "authorization_servers": [
+    "https://yutori.com"
+  ],
+  "bearer_methods_supported": [
+    "header"
+  ]
+}

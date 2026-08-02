@@ -1,0 +1,52 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/yutori-openapi-original.json
+entities:
+- name: Scout
+  description: An always-on agent that monitors the web for a query and emits updates.
+  id_field: scout_id
+  key_operations:
+  - create_scout_task_v1_scouting_tasks_post
+  - get_scout_detail_v1_scouting_tasks__scout_id__get
+  - patch_scout_v1_scouting_tasks__scout_id__patch
+  - delete_scout_v1_scouting_tasks__scout_id__delete
+- name: Update
+  description: A result/change emitted by a Scout run.
+  key_operations:
+  - get_updates_api_v1_scouting_tasks__scout_id__updates_get
+  - get_all_updates_api_v1_scouting_updates_get
+- name: Subscription
+  description: A subscriber to a Scout's updates (email/notifications).
+  key_operations:
+  - get_subscriptions_v1_scouting_tasks__scout_id__subscriptions_get
+  - subscribe_v1_scouting_tasks__scout_id__subscribe_post
+- name: BrowsingTask
+  description: A Navigator web-automation task run on a cloud browser.
+  id_field: id
+  key_operations:
+  - agent_run_endpoint_v1_browsing_tasks_post
+  - get_agent_run_status_v1_browsing_tasks__id__get
+  - get_task_trajectory_v1_browsing_tasks__id__trajectory_get
+- name: ResearchTask
+  description: A one-time multi-source web research task.
+  id_field: task_id
+  key_operations:
+  - create_research_task_v1_research_tasks_post
+  - get_research_task_status_v1_research_tasks__task_id__get
+relationships:
+- from: Update
+  to: Scout
+  type: belongs_to
+  via: scout_id
+- from: Subscription
+  to: Scout
+  type: belongs_to
+  via: scout_id
+- from: Scout
+  to: Update
+  type: has_many
+  via: scout_id
+- from: Scout
+  to: Subscription
+  type: has_many
+  via: scout_id

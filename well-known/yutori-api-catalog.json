@@ -1,0 +1,96 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://api.yutori.com/v1/",
+      "service-desc": [
+        {
+          "href": "https://docs.yutori.com/openapi.json",
+          "type": "application/json",
+          "title": "Yutori OpenAPI specification"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://docs.yutori.com",
+          "type": "text/html",
+          "title": "Yutori API documentation"
+        }
+      ],
+      "service-meta": [
+        {
+          "href": "https://yutori.com/api/llms.txt",
+          "type": "text/plain",
+          "title": "Yutori coding-agent quickstart (llms.txt)"
+        }
+      ],
+      "author": [
+        {
+          "href": "https://docs.yutori.com/authentication"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://api.yutori.com/health"
+        }
+      ],
+      "oauth-protected-resource": [
+        {
+          "href": "https://yutori.com/.well-known/oauth-protected-resource",
+          "type": "application/json",
+          "title": "Yutori OAuth Protected Resource Metadata (RFC 9728)"
+        }
+      ],
+      "oauth-authorization-server": [
+        {
+          "href": "https://yutori.com/.well-known/oauth-authorization-server",
+          "type": "application/json",
+          "title": "Yutori OAuth Authorization Server Metadata (RFC 8414)"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://yutori.com/auth.md",
+          "type": "text/markdown",
+          "title": "Yutori agent auth recipe (auth.md)"
+        }
+      ]
+    },
+    {
+      "anchor": "https://api.yutori.com/mcp",
+      "service-doc": [
+        {
+          "href": "https://github.com/yutori-ai/yutori-mcp",
+          "type": "text/html",
+          "title": "Yutori MCP server"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://yutori.com/.well-known/mcp/server-card.json",
+          "type": "application/json",
+          "title": "Yutori MCP server card"
+        }
+      ]
+    },
+    {
+      "anchor": "https://yutori.com/mcp",
+      "describedby": [
+        {
+          "href": "https://yutori.com/.well-known/mcp",
+          "type": "application/json",
+          "title": "Yutori WebMCP discovery descriptor"
+        }
+      ]
+    },
+    {
+      "anchor": "https://yutori.com/",
+      "describedby": [
+        {
+          "href": "https://yutori.com/.well-known/agent-skills/index.json",
+          "type": "application/json",
+          "title": "Yutori Agent Skills index (Agent Skills Discovery RFC v0.2.0)"
+        }
+      ]
+    }
+  ]
+}

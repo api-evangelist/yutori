@@ -1,0 +1,37 @@
+generated: '2026-07-21'
+method: searched
+status: published
+source: https://yutori.com/.well-known/mcp/server-card.json
+server:
+  name: com.yutori/yutori-mcp
+  title: Yutori MCP
+  version: 0.3.1
+  transport: streamable-http
+  url: https://api.yutori.com/mcp
+  repository: https://github.com/yutori-ai/yutori-mcp
+  documentation: https://docs.yutori.com
+  description: Create and manage Yutori Scouts and run Research and Browsing web-agent
+    tasks via the Yutori API.
+  authentication:
+    type: bearer
+    header: Authorization
+    value: Bearer {api_key}
+    note: Same Yutori API key used for the REST API; create one at https://platform.yutori.com
+web_mcp:
+  name: com.yutori/yutori-web-mcp
+  transport: streamable-http
+  url: https://yutori.com/mcp
+  description: Public read-only WebMCP tools describing Yutori and its developer resources.
+  tools:
+  - name: get_yutori_overview
+    description: Return a short overview of Yutori and its products (Navigator API,
+      Scouts, Delegate).
+  - name: get_navigator_model
+    description: 'Return details about the Navigator n1.5 model: capabilities, benchmarks,
+      pricing, and API compatibility.'
+  - name: list_developer_resources
+    description: Return the machine-readable URLs an agent or developer needs to integrate
+      Yutori.
+  - name: get_started
+    description: Return step-by-step instructions for getting a Yutori API key and
+      making the first request.

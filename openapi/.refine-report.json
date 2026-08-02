@@ -1,0 +1,22 @@
+{
+  "provider": "yutori",
+  "sources": [
+    "yutori-browsing-api-openapi.yml",
+    "yutori-chat-completions-api-openapi.yml",
+    "yutori-health-api-openapi.yml",
+    "yutori-research-api-openapi.yml",
+    "yutori-scouting-api-openapi.yml"
+  ],
+  "outputs": [
+    "yutori-browsing-api-openapi.yml",
+    "yutori-chat-completions-api-openapi.yml",
+    "yutori-health-api-openapi.yml",
+    "yutori-research-api-openapi.yml",
+    "yutori-scouting-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

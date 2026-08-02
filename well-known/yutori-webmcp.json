@@ -1,0 +1,40 @@
+{
+  "name": "com.yutori/yutori-web-mcp",
+  "title": "Yutori",
+  "description": "Public, read-only WebMCP tools describing Yutori, the Navigator (n1.5) model, and the developer resources.",
+  "protocolVersions": [
+    "2025-06-18",
+    "2025-03-26",
+    "2024-11-05"
+  ],
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://yutori.com/mcp"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.yutori.com/mcp",
+      "authentication": "Yutori API key sent as a bearer token"
+    }
+  ],
+  "serverCard": "https://yutori.com/.well-known/mcp/server-card.json",
+  "tools": [
+    {
+      "name": "get_yutori_overview",
+      "description": "Return a short overview of Yutori and its products (Navigator API, Scouts, Delegate)."
+    },
+    {
+      "name": "get_navigator_model",
+      "description": "Return details about the Navigator n1.5 model: capabilities, benchmarks, pricing, and API compatibility."
+    },
+    {
+      "name": "list_developer_resources",
+      "description": "Return the machine-readable URLs an agent or developer needs to integrate Yutori (docs, OpenAPI spec, MCP server, SDK, auth)."
+    },
+    {
+      "name": "get_started",
+      "description": "Return step-by-step instructions for getting a Yutori API key and making the first request."
+    }
+  ]
+}

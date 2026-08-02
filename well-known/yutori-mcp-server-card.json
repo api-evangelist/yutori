@@ -1,0 +1,69 @@
+{
+  "name": "com.yutori/yutori-mcp",
+  "title": "Yutori MCP",
+  "description": "Create and manage Yutori Scouts and run Research and Browsing web-agent tasks via the Yutori API.",
+  "version": "0.3.1",
+  "websiteUrl": "https://docs.yutori.com",
+  "documentationUrl": "https://docs.yutori.com",
+  "logo": "https://yutori.com/icon-512.png",
+  "iconUrl": "https://yutori.com/icon-512.png",
+  "icons": [
+    {
+      "src": "https://yutori.com/icon-512.png",
+      "mimeType": "image/png",
+      "sizes": ["512x512"]
+    },
+    {
+      "src": "https://yutori.com/logo.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": ["any"]
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/yutori-ai/yutori-mcp",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.yutori.com/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Yutori API key sent as a bearer token. Create a key at https://platform.yutori.com (see https://docs.yutori.com/authentication).",
+          "isRequired": true,
+          "isSecret": true,
+          "value": "Bearer {api_key}",
+          "variables": {
+            "api_key": {
+              "description": "Yutori API key",
+              "isRequired": true,
+              "isSecret": true
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "serverInfo": {
+    "name": "yutori-mcp",
+    "title": "Yutori MCP",
+    "version": "0.3.1",
+    "icons": [
+      {
+        "src": "https://yutori.com/icon-512.png",
+        "mimeType": "image/png",
+        "sizes": ["512x512"]
+      }
+    ]
+  },
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://api.yutori.com/mcp"
+  },
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    }
+  }
+}

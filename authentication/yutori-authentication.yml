@@ -1,0 +1,23 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/yutori-openapi-original.json
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: x-api-key
+  sources:
+  - openapi/yutori-openapi-original.json
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: 'Use Authorization: Bearer <api_key>'
+  sources:
+  - openapi/yutori-openapi-original.json

@@ -1,0 +1,15 @@
+generated: '2026-07-21'
+method: searched
+source: https://yutori.com/.well-known/agent-skills/index.json
+skills:
+- file: yutori-api.md
+  name: yutori-api
+  description: Authenticate and call the Yutori API for browser automation (Navigator
+    n1.5), web monitoring (Scouts), research, and the hosted MCP server.
+  api: openapi/yutori-openapi-original.json
+  published: https://yutori.com/.well-known/agent-skills/yutori-api/SKILL.md
+  operations:
+  - agent_run_endpoint_v1_browsing_tasks_post
+  - create_scout_task_v1_scouting_tasks_post
+  - create_research_task_v1_research_tasks_post
+  - create_chat_completion_v1_chat_completions_post

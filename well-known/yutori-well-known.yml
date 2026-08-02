@@ -1,0 +1,40 @@
+generated: '2026-07-21'
+method: searched
+source: https://yutori.com/.well-known/api-catalog
+hosts:
+- host: https://yutori.com
+  documents:
+  - path: /.well-known/api-catalog
+    status: 200
+    file: yutori-api-catalog.json
+    note: RFC 9727 API catalog (linkset) — points at OpenAPI, docs, MCP, skills
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: yutori-oauth-protected-resource.json
+    note: RFC 9728 protected-resource metadata (resource https://api.yutori.com)
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: yutori-oauth-authorization-server.json
+    note: RFC 8414 authorization-server metadata with agent_auth block (api_key)
+  - path: /.well-known/mcp/server-card.json
+    status: 200
+    file: yutori-mcp-server-card.json
+    note: MCP server card for the hosted MCP at https://api.yutori.com/mcp
+  - path: /.well-known/mcp
+    status: 200
+    file: yutori-webmcp.json
+    note: WebMCP discovery descriptor (public read-only tools at https://yutori.com/mcp)
+  - path: /.well-known/agent-skills/index.json
+    status: 200
+    file: yutori-agent-skills-index.json
+    note: Agent Skills Discovery RFC v0.2.0 index
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://api.yutori.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403

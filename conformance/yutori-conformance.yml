@@ -1,0 +1,38 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/yutori-openapi-original.json
+standards:
+- id: openapi-3.1
+  conforms: true
+  evidence: openapi document declares openapi 3.1.0
+- id: openai-chat-completions
+  conforms: true
+  evidence: POST /v1/chat/completions is OpenAI Chat Completions compatible (Navigator
+    n1.5 model)
+- id: oauth2
+  conforms: false
+  evidence: no oauth2 securityScheme; API-key bearer auth only
+- id: oidc
+  conforms: false
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: error responses use FastAPI HTTPValidationError (detail[]), not application/problem+json
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404
+- id: rfc9727-api-catalog
+  conforms: true
+  evidence: /.well-known/api-catalog served as application/linkset+json
+- id: rfc9728-oauth-protected-resource
+  conforms: true
+  evidence: /.well-known/oauth-protected-resource published
+- id: rfc8414-authorization-server-metadata
+  conforms: true
+  evidence: /.well-known/oauth-authorization-server published (with agent_auth block)
+- id: mcp
+  conforms: true
+  evidence: hosted streamable-http MCP server at https://api.yutori.com/mcp with published
+    server card
+- id: agent-skills-discovery
+  conforms: true
+  evidence: /.well-known/agent-skills/index.json per Agent Skills Discovery RFC v0.2.0

@@ -1,0 +1,30 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/yutori-openapi-original.json
+format: fastapi-detail
+note: >-
+  The OpenAPI declares only 422 validation errors (FastAPI HTTPValidationError,
+  envelope {"detail": [{"loc": [...], "msg": "...", "type": "..."}]}). The
+  documented auth failures (401/403/429) are described in the auth recipe at
+  https://yutori.com/auth.md but are not enumerated per-operation in the spec.
+envelope:
+  field: detail
+  shape: 'FastAPI validation error: detail is an array of {loc, msg, type} objects'
+problems:
+- status: 422
+  title: Validation Error
+  schema: HTTPValidationError
+  source: openapi/yutori-openapi-original.json (declared on nearly all operations)
+- status: 401
+  title: Unauthorized
+  remediation: API key is missing, malformed, or revoked; send Authorization Bearer
+    <key>. Mint a new key at https://platform.yutori.com.
+  source: https://yutori.com/auth.md
+- status: 403
+  title: Forbidden
+  remediation: The key is valid but not entitled to the resource.
+  source: https://yutori.com/auth.md
+- status: 429
+  title: Too Many Requests
+  remediation: Back off and retry; see rate limits via GET /v1/usage.
+  source: https://yutori.com/auth.md

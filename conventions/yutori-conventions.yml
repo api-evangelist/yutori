@@ -1,0 +1,38 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/yutori-openapi-original.json
+authentication:
+  style: api-key bearer token
+  header: 'Authorization: Bearer <api_key>'
+  alt_header: x-api-key
+  recipe: https://yutori.com/auth.md
+  see: authentication/yutori-authentication.yml
+idempotency:
+  supported: false
+  note: No Idempotency-Key header or idempotency contract is documented in the spec
+    or docs.
+pagination:
+  style: cursor
+  params:
+  - cursor
+  - page_size
+  applies_to:
+  - GET /v1/browsing/tasks
+  - GET /v1/research/tasks
+  - GET /v1/scouting/updates
+  note: Cursor-based pagination on list endpoints; page_size controls page length.
+versioning:
+  style: uri-path
+  current: v1
+  see: lifecycle/yutori-lifecycle.yml
+error_envelope:
+  shape: 'FastAPI detail array: {"detail": [{"loc": [...], "msg": "...", "type": "..."}]}'
+  see: errors/yutori-problem-types.yml
+rate_limiting:
+  signal: Rate limits and remaining quota are reported via GET /v1/usage.
+  documented_status: 429 Too Many Requests on limit exceeded (back off and retry)
+webhooks:
+  supported: true
+  note: Outbound webhooks on Scout/Research/Browsing create endpoints; scout_webhook
+    (JSON) or slack format.
+  see: asyncapi/yutori-webhooks.yml

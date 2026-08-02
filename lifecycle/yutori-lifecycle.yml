@@ -1,0 +1,22 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/yutori-openapi-original.json
+versioning:
+  scheme: uri-path
+  current: v1
+  docs: https://docs.yutori.com
+deprecation:
+  model_deprecation:
+    note: Navigator n1 is deprecated in favor of Navigator n1.5.
+    docs: https://docs.yutori.com/reference/n1
+  sunset_header: false
+health_check: https://api.yutori.com/health
+status_page: null
+sla:
+  note: Custom SLAs offered for enterprise/high-volume use (contact api@yutori.com).
+  url: https://docs.yutori.com/pricing
+deprecated_operations:
+- openapi/yutori-openapi-original.json#mark_scout_as_complete_v1_scouting_tasks__scout_id__complete_post
+- openapi/yutori-openapi-original.json#subscribe_v1_scouting_tasks__scout_id__subscribe_post
+- openapi/yutori-openapi-original.json#unsubscribe_v1_scouting_tasks__scout_id__unsubscribe_post
+- openapi/yutori-openapi-original.json#bulk_subscribe_v1_scouting_tasks__scout_id__subscribe_bulk_post

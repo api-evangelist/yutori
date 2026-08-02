@@ -1,0 +1,42 @@
+# Yutori API
+
+## Docs
+
+- [Get API key](https://docs.yutori.com/authentication.md): Generate a key and make your first API request
+- [Overview](https://docs.yutori.com/index.md): Build reliable web agents with the Yutori API
+- [Quickstart for AI Agents](https://docs.yutori.com/llm-quickstart.md)
+- [Pricing](https://docs.yutori.com/pricing.md): Simple, transparent pricing for the Navigator, Browsing, Research, and Scouting APIs
+- [Create A Task](https://docs.yutori.com/reference/browsing-create.md): Launches a website navigation agent to execute the task on a cloud browser.
+- [List Browsing Tasks](https://docs.yutori.com/reference/browsing-list.md): List browsing tasks for the authenticated user.
+- [Get Status And Results](https://docs.yutori.com/reference/browsing-status.md): Returns the current status (queued, running, succeeded, failed) and any results if completed.
+- [Download Task Trajectory](https://docs.yutori.com/reference/browsing-trajectory.md): Downloads the trajectory for a completed browsing task.
+- [Health](https://docs.yutori.com/reference/health.md)
+- [Navigator n1 (Deprecated)](https://docs.yutori.com/reference/n1.md)
+- [Navigator n1.5](https://docs.yutori.com/reference/n1-5.md)
+- [Get Started](https://docs.yutori.com/reference/navigator.md)
+- [Navigator Browser Extension](https://docs.yutori.com/reference/navigator-browser-extension.md): A lightweight Chrome extension powered by the Navigator API to automate browser tasks
+- [Create A Task](https://docs.yutori.com/reference/research-create.md): Launches a one-time research task on the web.
+- [List Research Tasks](https://docs.yutori.com/reference/research-list.md): List research tasks for the authenticated user.
+- [Get Status And Results](https://docs.yutori.com/reference/research-status.md): Returns the current status (queued, running, succeeded, failed) and any results if completed.
+- [Get Scout](https://docs.yutori.com/reference/scout-get-detail.md): Get detailed information about a specific scout owned by this user.
+- [Restart Scout](https://docs.yutori.com/reference/scout-restart.md)
+- [Mark Scout As Done](https://docs.yutori.com/reference/scouts-complete.md): Mark a scout as done. The scout will be archived and stop running.
+- [Create A Scout](https://docs.yutori.com/reference/scouts-create.md)
+- [Delete Scout](https://docs.yutori.com/reference/scouts-delete.md)
+- [Update Email Settings](https://docs.yutori.com/reference/scouts-email-settings-update.md): Update email notification settings and manage subscribers for a scout.
+- [List Scouts](https://docs.yutori.com/reference/scouts-list.md): List scouting tasks for this user.
+- [Partially Update A Scout](https://docs.yutori.com/reference/scouts-patch.md): Update specific fields of an existing Scout. Only provided fields will be updated; omitted fields remain unchanged.
+- [Get Updates](https://docs.yutori.com/reference/scouts-updates.md)
+- [Get Usage](https://docs.yutori.com/reference/usage.md): Get usage statistics over different time periods, active scouts, and rate limits.
+- [Get started](https://docs.yutori.com/reference/webhook.md): Set up outbound webhooks.
+
+## OpenAPI Specs
+
+- [openapi](https://docs.yutori.com/openapi.json)
+
+## Optional
+
+- [Yutori](https://www.yutori.com)
+- [Yutori Local](https://yutori.com/local)
+- [Python SDK](https://github.com/yutori-ai/yutori-sdk-python)
+- [MCP](https://github.com/yutori-ai/yutori-mcp)

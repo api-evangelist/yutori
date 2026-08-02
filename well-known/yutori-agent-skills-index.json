@@ -1,0 +1,19 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "yutori-api",
+      "type": "skill-md",
+      "description": "Authenticate and call the Yutori API for browser automation (Navigator n1.5), web monitoring (Scouts), research, and the hosted MCP server.",
+      "url": "https://yutori.com/.well-known/agent-skills/yutori-api/SKILL.md",
+      "digest": "sha256:3f8961719dadda199cd8591bb38d1f7e4454689949d89da2452ad5035dacbc3a"
+    },
+    {
+      "name": "yutori-auth",
+      "type": "skill-md",
+      "description": "How agents authenticate to the Yutori API: register for an API key and present it as a bearer token (auth.md recipe).",
+      "url": "https://yutori.com/auth.md",
+      "digest": "sha256:760fbed421c3440d76246f37a59afc63bb5721f800ea3d3321eb73c70000c94d"
+    }
+  ]
+}

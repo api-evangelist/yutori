@@ -1,0 +1,23 @@
+{
+  "issuer": "https://yutori.com",
+  "resource": "https://api.yutori.com",
+  "authorization_servers": [
+    "https://yutori.com"
+  ],
+  "bearer_methods_supported": [
+    "header"
+  ],
+  "service_documentation": "https://docs.yutori.com/authentication",
+  "agent_auth": {
+    "skill": "https://yutori.com/auth.md",
+    "register_uri": "https://platform.yutori.com/sign-up",
+    "identity_types_supported": [
+      "anonymous"
+    ],
+    "anonymous": {
+      "credential_types_supported": [
+        "api_key"
+      ]
+    }
+  }
+}

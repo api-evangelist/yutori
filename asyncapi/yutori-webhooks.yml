@@ -1,0 +1,29 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.yutori.com/reference/webhook
+type: Webhooks
+spec_type: none
+note: >-
+  Yutori documents outbound webhooks but does not publish an AsyncAPI document.
+  A webhook URL may be supplied on any create endpoint (Create Scout, Create
+  Research, Create Browsing). Payloads are delivered as a structured scout_webhook
+  JSON envelope, or as Slack Block Kit payloads when webhook_format is set to slack.
+delivery:
+  method: POST
+  content_type: application/json
+  user_agent: Scout-Webhook/1.0
+  headers:
+  - name: X-Scout-Event
+    example: scout.update
+formats:
+- scout_webhook
+- slack
+events:
+- event_type: scout_update
+  description: A Scout run completed and may carry new changes/updates for the monitored
+    query.
+  envelope_fields:
+  - scout (id, display_name, query)
+  - update (id, timestamp, status, has_changes, summary, details_url, report_content)
+  - delivery (id, attempt, timestamp)
+test_endpoint: POST /v1/scouting/webhooks/test
