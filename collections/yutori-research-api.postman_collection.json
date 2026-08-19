@@ -1,0 +1,529 @@
+{
+  "item": [
+    {
+      "id": "b4616439-5249-4c4c-b081-a203cf21dcb8",
+      "name": "Research",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "568b9f9e-ad85-4c20-ab0f-4d3104f6ae16",
+          "name": "Create A Task",
+          "request": {
+            "name": "Create A Task",
+            "description": {
+              "content": "Launches a one-time research task on the web.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "research",
+                "tasks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"output_schema\": {\n    \"key_0\": 3843.136847621247\n  },\n  \"task_spec\": {\n    \"output_schema\": {\n      \"type\": \"json\",\n      \"json_schema\": {\n        \"key_0\": \"string\",\n        \"key_1\": 5382\n      }\n    }\n  },\n  \"used_deprecated_task_spec\": false,\n  \"user_timezone\": \"America/Los_Angeles\",\n  \"user_location\": \"<string>\",\n  \"skip_email\": true,\n  \"webhook_url\": \"<string>\",\n  \"webhook_format\": \"scout\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8e319818-fe12-413f-b3ef-267776e9e1c4",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "research",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"What are the latest developments in quantum computing from the past week?\",\n  \"output_schema\": {\n    \"key_0\": 922,\n    \"key_1\": \"string\",\n    \"key_2\": 2775,\n    \"key_3\": false\n  },\n  \"task_spec\": {\n    \"output_schema\": {\n      \"type\": \"json\",\n      \"json_schema\": {\n        \"key_0\": \"string\"\n      }\n    }\n  },\n  \"used_deprecated_task_spec\": false,\n  \"user_timezone\": \"America/Los_Angeles\",\n  \"user_location\": \"<string>\",\n  \"skip_email\": true,\n  \"webhook_url\": \"<string>\",\n  \"webhook_format\": \"scout\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"task_id\": \"string\",\n  \"view_url\": \"string\",\n  \"status\": \"running\",\n  \"webhook_url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a9030901-f72c-4119-a75f-032735b15a34",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "research",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"What are the latest developments in quantum computing from the past week?\",\n  \"output_schema\": {\n    \"key_0\": 922,\n    \"key_1\": \"string\",\n    \"key_2\": 2775,\n    \"key_3\": false\n  },\n  \"task_spec\": {\n    \"output_schema\": {\n      \"type\": \"json\",\n      \"json_schema\": {\n        \"key_0\": \"string\"\n      }\n    }\n  },\n  \"used_deprecated_task_spec\": false,\n  \"user_timezone\": \"America/Los_Angeles\",\n  \"user_location\": \"<string>\",\n  \"skip_email\": true,\n  \"webhook_url\": \"<string>\",\n  \"webhook_format\": \"scout\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e1ee5c26-9ca1-49c9-beaf-a855ccfdd299",
+          "name": "List Tasks",
+          "request": {
+            "name": "List Tasks",
+            "description": {
+              "content": "List research tasks for the authenticated user.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "research",
+                "tasks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by task status: running, succeeded, or failed."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "671b5710-3cd0-4584-a747-8ab221ef2aa6",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "research",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"string\",\n      \"query\": \"string\",\n      \"status\": \"running\",\n      \"created_at\": \"2023-04-19T18:20:17.086Z\",\n      \"view_url\": \"string\",\n      \"rejection_reason\": \"budget_exceeded\"\n    },\n    {\n      \"task_id\": \"string\",\n      \"query\": \"string\",\n      \"status\": \"failed\",\n      \"created_at\": \"1951-10-20T04:25:57.544Z\",\n      \"view_url\": \"string\",\n      \"rejection_reason\": \"budget_exceeded\"\n    }\n  ],\n  \"total\": 0,\n  \"filtered_total\": 0,\n  \"summary\": {\n    \"running\": 9538,\n    \"succeeded\": 212,\n    \"failed\": 6252\n  },\n  \"page_size\": 2390,\n  \"has_more\": false,\n  \"prev_cursor\": \"string\",\n  \"next_cursor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "50c41eb4-789f-43af-92ce-7c198a13580a",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "research",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f8d44897-f027-49bb-9bce-d8a9abcbeee2",
+          "name": "Get Status And Results",
+          "request": {
+            "name": "Get Status And Results",
+            "description": {
+              "content": "Returns the current status (queued, running, succeeded, failed) and any results if completed.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "research",
+                "tasks",
+                ":task_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "task_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f4914438-212f-49aa-8980-5a48cae4a12b",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "research",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"task_id\": \"string\",\n  \"view_url\": \"string\",\n  \"status\": \"succeeded\",\n  \"result\": \"string\",\n  \"structured_result\": {\n    \"key_0\": 5964\n  },\n  \"structured_output_status\": \"failed\",\n  \"created_at\": \"1996-06-19T23:05:05.139Z\",\n  \"updates\": [\n    {\n      \"id\": \"string\",\n      \"timestamp\": 9754,\n      \"content\": \"string\",\n      \"citations\": [\n        {\n          \"id\": \"string\",\n          \"url\": \"string\",\n          \"preview_data\": {\n            \"key_0\": false,\n            \"key_1\": false\n          }\n        },\n        {\n          \"id\": \"string\",\n          \"url\": \"string\",\n          \"preview_data\": {\n            \"key_0\": 7800.832803573632\n          }\n        }\n      ],\n      \"stats\": {\n        \"num_tool_calls\": 0,\n        \"num_mcp_tool_calls\": 0,\n        \"num_webpages_read\": 0,\n        \"num_navigator_steps\": 0,\n        \"num_websites_visited\": 0,\n        \"sec_saved\": 0\n      },\n      \"structured_result\": {\n        \"key_0\": true,\n        \"key_1\": 214,\n        \"key_2\": true\n      },\n      \"structured_output_status\": \"not_requested\",\n      \"header_image_url\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"timestamp\": 5706,\n      \"content\": \"string\",\n      \"citations\": [\n        {\n          \"id\": \"string\",\n          \"url\": \"string\",\n          \"preview_data\": {\n            \"key_0\": false,\n            \"key_1\": false\n          }\n        },\n        {\n          \"id\": \"string\",\n          \"url\": \"string\",\n          \"preview_data\": {\n            \"key_0\": \"string\",\n            \"key_1\": true\n          }\n        }\n      ],\n      \"stats\": {\n        \"num_tool_calls\": 0,\n        \"num_mcp_tool_calls\": 0,\n        \"num_webpages_read\": 0,\n        \"num_navigator_steps\": 0,\n        \"num_websites_visited\": 0,\n        \"sec_saved\": 0\n      },\n      \"structured_result\": {\n        \"key_0\": 4175,\n        \"key_1\": true\n      },\n      \"structured_output_status\": \"pending\",\n      \"header_image_url\": \"string\"\n    }\n  ],\n  \"rejection_reason\": \"subscription_inactive\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e0fe0531-706a-4b7d-9fc5-f974eeb678eb",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "research",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.yutori.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "abae3130-b369-4b98-8905-e058a07c696f",
+    "name": "Fast Browsing Research API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

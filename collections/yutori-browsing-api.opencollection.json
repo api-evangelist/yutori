@@ -1,0 +1,112 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fast Browsing API",
+    "version": "0.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Browsing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.yutori.com/v1/browsing/tasks",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by task status: running, succeeded, or failed."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List browsing tasks for the authenticated user."
+        },
+        {
+          "info": {
+            "name": "Create A Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.yutori.com/v1/browsing/tasks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Launches a website navigation agent to execute the task on a cloud browser."
+        },
+        {
+          "info": {
+            "name": "Get Agent Run Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.yutori.com/v1/browsing/tasks/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns the current status (queued, running, succeeded, failed) and any results if completed."
+        },
+        {
+          "info": {
+            "name": "Download Task Trajectory",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.yutori.com/v1/browsing/tasks/:id/trajectory",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "output_type",
+                "value": "",
+                "type": "query",
+                "description": "Output format: 'json' or 'zip'"
+              }
+            ]
+          },
+          "docs": "Downloads the trajectory for a completed browsing task."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

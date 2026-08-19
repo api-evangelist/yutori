@@ -10,8 +10,8 @@ server:
   url: https://api.yutori.com/mcp
   repository: https://github.com/yutori-ai/yutori-mcp
   documentation: https://docs.yutori.com
-  description: Create and manage Yutori Scouts and run Research and Browsing web-agent
-    tasks via the Yutori API.
+  description: Create and manage Yutori Scouts and run Research and Browsing web-agent tasks via the Yutori
+    API.
   authentication:
     type: bearer
     header: Authorization
@@ -24,14 +24,19 @@ web_mcp:
   description: Public read-only WebMCP tools describing Yutori and its developer resources.
   tools:
   - name: get_yutori_overview
-    description: Return a short overview of Yutori and its products (Navigator API,
-      Scouts, Delegate).
+    description: Return a short overview of Yutori and its products (Navigator API, Scouts, Delegate).
   - name: get_navigator_model
-    description: 'Return details about the Navigator n1.5 model: capabilities, benchmarks,
-      pricing, and API compatibility.'
+    description: 'Return details about the Navigator n1.5 model: capabilities, benchmarks, pricing, and
+      API compatibility.'
   - name: list_developer_resources
-    description: Return the machine-readable URLs an agent or developer needs to integrate
-      Yutori.
+    description: Return the machine-readable URLs an agent or developer needs to integrate Yutori.
   - name: get_started
-    description: Return step-by-step instructions for getting a Yutori API key and
-      making the first request.
+    description: Return step-by-step instructions for getting a Yutori API key and making the first request.
+deployment:
+  mode: remote
+  endpoint: https://api.yutori.com/mcp
+  verified: probed
+  probe: live
+  tools: 11
+  checked: '2026-08-12'
+  source: catalog MCP census

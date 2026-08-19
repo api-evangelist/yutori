@@ -1,0 +1,440 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fast Browsing Scouting API",
+    "version": "0.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Scouting",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get All Updates Api",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.yutori.com/v1/scouting/updates",
+            "params": [
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get all updates across the user's scouts within a time range."
+        },
+        {
+          "info": {
+            "name": "Get Updates Api",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.yutori.com/v1/scouting/tasks/:scout_id/updates",
+            "params": [
+              {
+                "name": "scout_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get Updates Api"
+        },
+        {
+          "info": {
+            "name": "Get Usage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.yutori.com/v1/usage",
+            "params": [
+              {
+                "name": "period",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get usage statistics over different time periods, active scouts, and rate limits."
+        },
+        {
+          "info": {
+            "name": "Get Scouts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.yutori.com/v1/scouting/tasks",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by scout status"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List scouting tasks for this user."
+        },
+        {
+          "info": {
+            "name": "Create Scout Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.yutori.com/v1/scouting/tasks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create Scout Task"
+        },
+        {
+          "info": {
+            "name": "Get Scout Detail",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.yutori.com/v1/scouting/tasks/:scout_id",
+            "params": [
+              {
+                "name": "scout_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get detailed information about a specific scout owned by this user."
+        },
+        {
+          "info": {
+            "name": "Edit Scout",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.yutori.com/v1/scouting/tasks/:scout_id",
+            "params": [
+              {
+                "name": "scout_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Edit Scout"
+        },
+        {
+          "info": {
+            "name": "Partially update a Scout",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.yutori.com/v1/scouting/tasks/:scout_id",
+            "params": [
+              {
+                "name": "scout_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update specific fields of an existing Scout. Only provided fields will be updated; omitted fields remain unchanged."
+        },
+        {
+          "info": {
+            "name": "Delete Scout",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.yutori.com/v1/scouting/tasks/:scout_id",
+            "params": [
+              {
+                "name": "scout_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete Scout"
+        },
+        {
+          "info": {
+            "name": "Mark Scout As Done",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.yutori.com/v1/scouting/tasks/:scout_id/done",
+            "params": [
+              {
+                "name": "scout_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Mark a scout as done. The scout will be archived and stop running."
+        },
+        {
+          "info": {
+            "name": "Mark Scout As Complete",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.yutori.com/v1/scouting/tasks/:scout_id/complete",
+            "params": [
+              {
+                "name": "scout_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "⚠️ DEPRECATED: Use POST /scouting/tasks/{scout_id}/done instead."
+        },
+        {
+          "info": {
+            "name": "Subscribe",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.yutori.com/v1/scouting/tasks/:scout_id/subscribe",
+            "params": [
+              {
+                "name": "scout_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "⚠️ DEPRECATED: Use PUT /scouting/tasks/{scout_id}/email-settings with subscribers_to_add instead"
+        },
+        {
+          "info": {
+            "name": "Unsubscribe",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.yutori.com/v1/scouting/tasks/:scout_id/unsubscribe",
+            "params": [
+              {
+                "name": "scout_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "⚠️ DEPRECATED: Use PUT /scouting/tasks/{scout_id}/email-settings with subscribers_to_remove instead"
+        },
+        {
+          "info": {
+            "name": "Get Subscriptions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.yutori.com/v1/scouting/tasks/:scout_id/subscriptions",
+            "params": [
+              {
+                "name": "scout_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get Subscriptions"
+        },
+        {
+          "info": {
+            "name": "Bulk Subscribe",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.yutori.com/v1/scouting/tasks/:scout_id/subscribe/bulk",
+            "params": [
+              {
+                "name": "scout_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "⚠️ DEPRECATED: Use PUT /scouting/tasks/{scout_id}/email-settings with subscribers_to_add instead"
+        },
+        {
+          "info": {
+            "name": "Pause Scout Endpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.yutori.com/v1/scouting/tasks/:scout_id/pause",
+            "params": [
+              {
+                "name": "scout_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Pause Scout Endpoint"
+        },
+        {
+          "info": {
+            "name": "Resume Scout Endpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.yutori.com/v1/scouting/tasks/:scout_id/resume",
+            "params": [
+              {
+                "name": "scout_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Resume Scout Endpoint"
+        },
+        {
+          "info": {
+            "name": "Restart Scout Endpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.yutori.com/v1/scouting/tasks/:scout_id/restart",
+            "params": [
+              {
+                "name": "scout_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Restart Scout Endpoint"
+        },
+        {
+          "info": {
+            "name": "Update Email Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.yutori.com/v1/scouting/tasks/:scout_id/email-settings",
+            "params": [
+              {
+                "name": "scout_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update email notification settings and manage subscribers for a scout."
+        },
+        {
+          "info": {
+            "name": "Test Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.yutori.com/v1/scouting/webhooks/test",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Test Webhook"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

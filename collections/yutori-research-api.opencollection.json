@@ -1,0 +1,88 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fast Browsing Research API",
+    "version": "0.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Research",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.yutori.com/v1/research/tasks",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by task status: running, succeeded, or failed."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List research tasks for the authenticated user."
+        },
+        {
+          "info": {
+            "name": "Create A Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.yutori.com/v1/research/tasks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Launches a one-time research task on the web."
+        },
+        {
+          "info": {
+            "name": "Get Status And Results",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.yutori.com/v1/research/tasks/:task_id",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns the current status (queued, running, succeeded, failed) and any results if completed."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
