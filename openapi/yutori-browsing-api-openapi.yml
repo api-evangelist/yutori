@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Fast Browsing API
   version: 0.1.0
@@ -153,48 +153,22 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
+    JsonSchemaSpec:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    RejectionReason:
-      type: string
-      enum:
-      - insufficient_prepaid_balance
-      - budget_exceeded
-      - subscription_inactive
-      title: RejectionReason
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
         type:
           type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          const: json
+          title: Type
+          default: json
+        json_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Json Schema
+          description: A JSON Schema object defining the structure
       type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      title: JsonSchemaSpec
     TaskListResponse:
       properties:
         tasks:
@@ -244,6 +218,182 @@ components:
       required:
       - tasks
       title: TaskListResponse
+    RejectionReason:
+      type: string
+      enum:
+      - insufficient_prepaid_balance
+      - budget_exceeded
+      - subscription_inactive
+      title: RejectionReason
+    TaskListItem:
+      properties:
+        task_id:
+          type: string
+          title: Task Id
+          description: Unique identifier for this task
+        query:
+          type: string
+          title: Query
+          description: Task or research query submitted by the caller
+        status:
+          type: string
+          enum:
+          - running
+          - succeeded
+          - failed
+          title: Status
+          description: 'Lightweight task status for list views, derived from stored task state: ''succeeded'' (results are retrievable), ''failed'' (terminal with no retrievable results), or ''running'' (everything else). Because it is computed without a live workflow lookup, ''running'' also covers queued tasks and the brief window before a finished workflow is reconciled in the database. Call GET /v1/{browsing,research}/tasks/{id} for the authoritative queued/running/succeeded/failed status of a single task.'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the task was created
+        view_url:
+          type: string
+          title: View Url
+          description: URL to view this task in the API platform dashboard
+        rejection_reason:
+          anyOf:
+          - $ref: '#/components/schemas/RejectionReason'
+          - type: 'null'
+          description: If status is 'failed', the specific billing reason for rejection when available
+      type: object
+      required:
+      - task_id
+      - query
+      - status
+      - created_at
+      - view_url
+      title: TaskListItem
+      description: Lightweight one-time task metadata for developer API list endpoints.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TaskSpec:
+      properties:
+        output_schema:
+          anyOf:
+          - $ref: '#/components/schemas/JsonSchemaSpec'
+          - type: 'null'
+      type: object
+      title: TaskSpec
+    TaskListSummary:
+      properties:
+        running:
+          type: integer
+          title: Running
+          description: Number of tasks still running
+        succeeded:
+          type: integer
+          title: Succeeded
+          description: Number of tasks with retrievable results
+        failed:
+          type: integer
+          title: Failed
+          description: Number of terminal tasks without retrievable results
+      type: object
+      required:
+      - running
+      - succeeded
+      - failed
+      title: TaskListSummary
+      description: Summary counts of one-time tasks by lightweight list status.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    AgentRunResponse:
+      properties:
+        task_id:
+          type: string
+          title: Task Id
+          description: Unique identifier for this browsing task
+        view_url:
+          type: string
+          title: View Url
+        status:
+          type: string
+          enum:
+          - queued
+          - running
+          - succeeded
+          - failed
+          title: Status
+        result:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Result
+        paused:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Paused
+        structured_result:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Structured Result
+          description: If an output schema was provided, the result formatted as JSON matching that schema
+        structured_output_status:
+          anyOf:
+          - type: string
+            enum:
+            - not_requested
+            - pending
+            - succeeded
+            - failed
+          - type: 'null'
+          title: Structured Output Status
+          description: Whether structured output was requested, is still pending, succeeded, or failed
+        webhook_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Webhook Url
+          description: Echoes the webhook URL configured for this agent.run request, if provided.
+        rejection_reason:
+          anyOf:
+          - $ref: '#/components/schemas/RejectionReason'
+          - type: 'null'
+          description: If status is 'failed', the specific billing reason for rejection
+      type: object
+      required:
+      - task_id
+      - view_url
+      - status
+      title: AgentRunResponse
     AgentRunRequest:
       properties:
         output_schema:
@@ -347,156 +497,6 @@ components:
       - task
       - start_url
       title: AgentRunRequest
-    TaskSpec:
-      properties:
-        output_schema:
-          anyOf:
-          - $ref: '#/components/schemas/JsonSchemaSpec'
-          - type: 'null'
-      type: object
-      title: TaskSpec
-    TaskListItem:
-      properties:
-        task_id:
-          type: string
-          title: Task Id
-          description: Unique identifier for this task
-        query:
-          type: string
-          title: Query
-          description: Task or research query submitted by the caller
-        status:
-          type: string
-          enum:
-          - running
-          - succeeded
-          - failed
-          title: Status
-          description: 'Lightweight task status for list views, derived from stored task state: ''succeeded'' (results are retrievable), ''failed'' (terminal with no retrievable results), or ''running'' (everything else). Because it is computed without a live workflow lookup, ''running'' also covers queued tasks and the brief window before a finished workflow is reconciled in the database. Call GET /v1/{browsing,research}/tasks/{id} for the authoritative queued/running/succeeded/failed status of a single task.'
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: When the task was created
-        view_url:
-          type: string
-          title: View Url
-          description: URL to view this task in the API platform dashboard
-        rejection_reason:
-          anyOf:
-          - $ref: '#/components/schemas/RejectionReason'
-          - type: 'null'
-          description: If status is 'failed', the specific billing reason for rejection when available
-      type: object
-      required:
-      - task_id
-      - query
-      - status
-      - created_at
-      - view_url
-      title: TaskListItem
-      description: Lightweight one-time task metadata for developer API list endpoints.
-    TaskListSummary:
-      properties:
-        running:
-          type: integer
-          title: Running
-          description: Number of tasks still running
-        succeeded:
-          type: integer
-          title: Succeeded
-          description: Number of tasks with retrievable results
-        failed:
-          type: integer
-          title: Failed
-          description: Number of terminal tasks without retrievable results
-      type: object
-      required:
-      - running
-      - succeeded
-      - failed
-      title: TaskListSummary
-      description: Summary counts of one-time tasks by lightweight list status.
-    JsonSchemaSpec:
-      properties:
-        type:
-          type: string
-          const: json
-          title: Type
-          default: json
-        json_schema:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Json Schema
-          description: A JSON Schema object defining the structure
-      type: object
-      title: JsonSchemaSpec
-    AgentRunResponse:
-      properties:
-        task_id:
-          type: string
-          title: Task Id
-          description: Unique identifier for this browsing task
-        view_url:
-          type: string
-          title: View Url
-        status:
-          type: string
-          enum:
-          - queued
-          - running
-          - succeeded
-          - failed
-          title: Status
-        result:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Result
-        paused:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Paused
-        structured_result:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - items: {}
-            type: array
-          - type: 'null'
-          title: Structured Result
-          description: If an output schema was provided, the result formatted as JSON matching that schema
-        structured_output_status:
-          anyOf:
-          - type: string
-            enum:
-            - not_requested
-            - pending
-            - succeeded
-            - failed
-          - type: 'null'
-          title: Structured Output Status
-          description: Whether structured output was requested, is still pending, succeeded, or failed
-        webhook_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Webhook Url
-          description: Echoes the webhook URL configured for this agent.run request, if provided.
-        rejection_reason:
-          anyOf:
-          - $ref: '#/components/schemas/RejectionReason'
-          - type: 'null'
-          description: If status is 'failed', the specific billing reason for rejection
-      type: object
-      required:
-      - task_id
-      - view_url
-      - status
-      title: AgentRunResponse
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

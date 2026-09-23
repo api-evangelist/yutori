@@ -1,11 +1,7 @@
 {
   "provider": "yutori",
   "sources": [
-    "yutori-browsing-api-openapi.yml",
-    "yutori-chat-completions-api-openapi.yml",
-    "yutori-health-api-openapi.yml",
-    "yutori-research-api-openapi.yml",
-    "yutori-scouting-api-openapi.yml"
+    "_original/yutori-openapi-original.json"
   ],
   "outputs": [
     "yutori-browsing-api-openapi.yml",
@@ -17,6 +13,24 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "yutori-openapi-original.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "yutori-openapi-original.json: tagged paths GET /v1/health -> Health",
+    "yutori-openapi-original.json: tagged paths GET /v1/scouting/updates -> Scouting",
+    "yutori-openapi-original.json: tagged paths GET /v1/scouting/tasks/{scout_id}/updates -> Scouting",
+    "yutori-openapi-original.json: declared missing tag: Browsing",
+    "yutori-openapi-original.json: declared missing tag: Chat Completions",
+    "yutori-openapi-original.json: declared missing tag: Health",
+    "yutori-openapi-original.json: declared missing tag: Research",
+    "yutori-openapi-original.json: declared missing tag: Scouting",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "yutori-browsing-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "yutori-chat-completions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "yutori-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "yutori-research-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "yutori-scouting-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
