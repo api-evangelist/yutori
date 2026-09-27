@@ -115,104 +115,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    JsonSchemaSpec:
-      properties:
-        type:
-          type: string
-          const: json
-          title: Type
-          default: json
-        json_schema:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Json Schema
-          description: A JSON Schema object defining the structure
-      type: object
-      title: JsonSchemaSpec
-    RejectionReason:
-      type: string
-      enum:
-      - insufficient_prepaid_balance
-      - budget_exceeded
-      - subscription_inactive
-      title: RejectionReason
-    TaskListResponse:
-      properties:
-        tasks:
-          items:
-            $ref: '#/components/schemas/TaskListItem'
-          type: array
-          title: Tasks
-        total:
-          type: integer
-          title: Total
-          description: Total count of all tasks (running + succeeded + failed)
-          default: 0
-        filtered_total:
-          type: integer
-          title: Filtered Total
-          description: Count of tasks matching the current filter
-          default: 0
-        summary:
-          anyOf:
-          - $ref: '#/components/schemas/TaskListSummary'
-          - type: 'null'
-          description: Counts by status
-        page_size:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Page Size
-          description: Requested page size (null if returning all)
-        has_more:
-          type: boolean
-          title: Has More
-          description: Whether more results exist after this page
-          default: false
-        prev_cursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Prev Cursor
-          description: Cursor for previous page
-        next_cursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next Cursor
-          description: Cursor for next page
-      type: object
-      required:
-      - tasks
-      title: TaskListResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     ResearchTaskStatusResponse:
       properties:
         task_id:
@@ -283,6 +185,224 @@ components:
       - status
       title: ResearchTaskStatusResponse
       description: Response for getting research task status and results.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Citation:
+      properties:
+        id:
+          type: string
+          title: Id
+        url:
+          type: string
+          title: Url
+        preview_data:
+          additionalProperties: true
+          type: object
+          title: Preview Data
+      type: object
+      required:
+      - id
+      - url
+      title: Citation
+    CreateResearchTaskResponse:
+      properties:
+        task_id:
+          type: string
+          title: Task Id
+          description: Unique identifier for this research task
+        view_url:
+          type: string
+          title: View Url
+          description: URL to view task progress and results
+        status:
+          type: string
+          enum:
+          - queued
+          - running
+          - succeeded
+          - failed
+          title: Status
+          description: Current status of the research task
+        webhook_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Webhook Url
+          description: Echoes the webhook URL configured for this task, if provided
+      type: object
+      required:
+      - task_id
+      - view_url
+      - status
+      title: CreateResearchTaskResponse
+      description: Response for creating a research task.
+    TaskSpec:
+      properties:
+        output_schema:
+          anyOf:
+          - $ref: '#/components/schemas/JsonSchemaSpec'
+          - type: 'null'
+      type: object
+      title: TaskSpec
+    TaskListResponse:
+      properties:
+        tasks:
+          items:
+            $ref: '#/components/schemas/TaskListItem'
+          type: array
+          title: Tasks
+        total:
+          type: integer
+          title: Total
+          description: Total count of all tasks (running + succeeded + failed)
+          default: 0
+        filtered_total:
+          type: integer
+          title: Filtered Total
+          description: Count of tasks matching the current filter
+          default: 0
+        summary:
+          anyOf:
+          - $ref: '#/components/schemas/TaskListSummary'
+          - type: 'null'
+          description: Counts by status
+        page_size:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Page Size
+          description: Requested page size (null if returning all)
+        has_more:
+          type: boolean
+          title: Has More
+          description: Whether more results exist after this page
+          default: false
+        prev_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev Cursor
+          description: Cursor for previous page
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+          description: Cursor for next page
+      type: object
+      required:
+      - tasks
+      title: TaskListResponse
+    DeveloperUpdate:
+      properties:
+        id:
+          type: string
+          title: Id
+        timestamp:
+          type: integer
+          title: Timestamp
+        content:
+          type: string
+          title: Content
+        citations:
+          items:
+            $ref: '#/components/schemas/Citation'
+          type: array
+          title: Citations
+        stats:
+          anyOf:
+          - $ref: '#/components/schemas/DeveloperReplayStats'
+          - type: 'null'
+        structured_result:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Structured Result
+        structured_output_status:
+          anyOf:
+          - type: string
+            enum:
+            - not_requested
+            - pending
+            - succeeded
+            - failed
+          - type: 'null'
+          title: Structured Output Status
+        header_image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Header Image Url
+      type: object
+      required:
+      - id
+      - timestamp
+      - content
+      title: DeveloperUpdate
+    DeveloperReplayStats:
+      properties:
+        num_tool_calls:
+          type: integer
+          title: Num Tool Calls
+          default: 0
+        num_mcp_tool_calls:
+          type: integer
+          title: Num Mcp Tool Calls
+          default: 0
+        num_webpages_read:
+          type: integer
+          title: Num Webpages Read
+          default: 0
+        num_navigator_steps:
+          type: integer
+          title: Num Navigator Steps
+          default: 0
+        num_websites_visited:
+          type: integer
+          title: Num Websites Visited
+          default: 0
+        sec_saved:
+          type: integer
+          title: Sec Saved
+          default: 0
+      type: object
+      title: DeveloperReplayStats
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     TaskListItem:
       properties:
         task_id:
@@ -324,46 +444,6 @@ components:
       - view_url
       title: TaskListItem
       description: Lightweight one-time task metadata for developer API list endpoints.
-    CreateResearchTaskResponse:
-      properties:
-        task_id:
-          type: string
-          title: Task Id
-          description: Unique identifier for this research task
-        view_url:
-          type: string
-          title: View Url
-          description: URL to view task progress and results
-        status:
-          type: string
-          enum:
-          - queued
-          - running
-          - succeeded
-          - failed
-          title: Status
-          description: Current status of the research task
-        webhook_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Webhook Url
-          description: Echoes the webhook URL configured for this task, if provided
-      type: object
-      required:
-      - task_id
-      - view_url
-      - status
-      title: CreateResearchTaskResponse
-      description: Response for creating a research task.
-    TaskSpec:
-      properties:
-        output_schema:
-          anyOf:
-          - $ref: '#/components/schemas/JsonSchemaSpec'
-          - type: 'null'
-      type: object
-      title: TaskSpec
     TaskListSummary:
       properties:
         running:
@@ -385,15 +465,6 @@ components:
       - failed
       title: TaskListSummary
       description: Summary counts of one-time tasks by lightweight list status.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     CreateResearchTaskRequest:
       properties:
         output_schema:
@@ -480,100 +551,29 @@ components:
       required:
       - query
       title: CreateResearchTaskRequest
-    DeveloperReplayStats:
+    RejectionReason:
+      type: string
+      enum:
+      - insufficient_prepaid_balance
+      - budget_exceeded
+      - subscription_inactive
+      title: RejectionReason
+    JsonSchemaSpec:
       properties:
-        num_tool_calls:
-          type: integer
-          title: Num Tool Calls
-          default: 0
-        num_mcp_tool_calls:
-          type: integer
-          title: Num Mcp Tool Calls
-          default: 0
-        num_webpages_read:
-          type: integer
-          title: Num Webpages Read
-          default: 0
-        num_navigator_steps:
-          type: integer
-          title: Num Navigator Steps
-          default: 0
-        num_websites_visited:
-          type: integer
-          title: Num Websites Visited
-          default: 0
-        sec_saved:
-          type: integer
-          title: Sec Saved
-          default: 0
-      type: object
-      title: DeveloperReplayStats
-    Citation:
-      properties:
-        id:
+        type:
           type: string
-          title: Id
-        url:
-          type: string
-          title: Url
-        preview_data:
-          additionalProperties: true
-          type: object
-          title: Preview Data
-      type: object
-      required:
-      - id
-      - url
-      title: Citation
-    DeveloperUpdate:
-      properties:
-        id:
-          type: string
-          title: Id
-        timestamp:
-          type: integer
-          title: Timestamp
-        content:
-          type: string
-          title: Content
-        citations:
-          items:
-            $ref: '#/components/schemas/Citation'
-          type: array
-          title: Citations
-        stats:
-          anyOf:
-          - $ref: '#/components/schemas/DeveloperReplayStats'
-          - type: 'null'
-        structured_result:
+          const: json
+          title: Type
+          default: json
+        json_schema:
           anyOf:
           - additionalProperties: true
             type: object
-          - items: {}
-            type: array
           - type: 'null'
-          title: Structured Result
-        structured_output_status:
-          anyOf:
-          - type: string
-            enum:
-            - not_requested
-            - pending
-            - succeeded
-            - failed
-          - type: 'null'
-          title: Structured Output Status
-        header_image_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Header Image Url
+          title: Json Schema
+          description: A JSON Schema object defining the structure
       type: object
-      required:
-      - id
-      - timestamp
-      - content
-      title: DeveloperUpdate
+      title: JsonSchemaSpec
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
