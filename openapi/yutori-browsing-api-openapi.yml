@@ -153,89 +153,13 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    TaskListItem:
-      properties:
-        task_id:
-          type: string
-          title: Task Id
-          description: Unique identifier for this task
-        query:
-          type: string
-          title: Query
-          description: Task or research query submitted by the caller
-        status:
-          type: string
-          enum:
-          - running
-          - succeeded
-          - failed
-          title: Status
-          description: 'Lightweight task status for list views, derived from stored task state: ''succeeded'' (results are retrievable), ''failed'' (terminal with no retrievable results), or ''running'' (everything else). Because it is computed without a live workflow lookup, ''running'' also covers queued tasks and the brief window before a finished workflow is reconciled in the database. Call GET /v1/{browsing,research}/tasks/{id} for the authoritative queued/running/succeeded/failed status of a single task.'
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: When the task was created
-        view_url:
-          type: string
-          title: View Url
-          description: URL to view this task in the API platform dashboard
-        rejection_reason:
-          anyOf:
-          - $ref: '#/components/schemas/RejectionReason'
-          - type: 'null'
-          description: If status is 'failed', the specific billing reason for rejection when available
-      type: object
-      required:
-      - task_id
-      - query
-      - status
-      - created_at
-      - view_url
-      title: TaskListItem
-      description: Lightweight one-time task metadata for developer API list endpoints.
-    JsonSchemaSpec:
-      properties:
-        type:
-          type: string
-          const: json
-          title: Type
-          default: json
-        json_schema:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Json Schema
-          description: A JSON Schema object defining the structure
-      type: object
-      title: JsonSchemaSpec
+    RejectionReason:
+      type: string
+      enum:
+      - insufficient_prepaid_balance
+      - budget_exceeded
+      - subscription_inactive
+      title: RejectionReason
     AgentRunResponse:
       properties:
         task_id:
@@ -300,6 +224,127 @@ components:
       - view_url
       - status
       title: AgentRunResponse
+    TaskListSummary:
+      properties:
+        running:
+          type: integer
+          title: Running
+          description: Number of tasks still running
+        succeeded:
+          type: integer
+          title: Succeeded
+          description: Number of tasks with retrievable results
+        failed:
+          type: integer
+          title: Failed
+          description: Number of terminal tasks without retrievable results
+      type: object
+      required:
+      - running
+      - succeeded
+      - failed
+      title: TaskListSummary
+      description: Summary counts of one-time tasks by lightweight list status.
+    TaskListItem:
+      properties:
+        task_id:
+          type: string
+          title: Task Id
+          description: Unique identifier for this task
+        query:
+          type: string
+          title: Query
+          description: Task or research query submitted by the caller
+        status:
+          type: string
+          enum:
+          - running
+          - succeeded
+          - failed
+          title: Status
+          description: 'Lightweight task status for list views, derived from stored task state: ''succeeded'' (results are retrievable), ''failed'' (terminal with no retrievable results), or ''running'' (everything else). Because it is computed without a live workflow lookup, ''running'' also covers queued tasks and the brief window before a finished workflow is reconciled in the database. Call GET /v1/{browsing,research}/tasks/{id} for the authoritative queued/running/succeeded/failed status of a single task.'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: When the task was created
+        view_url:
+          type: string
+          title: View Url
+          description: URL to view this task in the API platform dashboard
+        rejection_reason:
+          anyOf:
+          - $ref: '#/components/schemas/RejectionReason'
+          - type: 'null'
+          description: If status is 'failed', the specific billing reason for rejection when available
+      type: object
+      required:
+      - task_id
+      - query
+      - status
+      - created_at
+      - view_url
+      title: TaskListItem
+      description: Lightweight one-time task metadata for developer API list endpoints.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    JsonSchemaSpec:
+      properties:
+        type:
+          type: string
+          const: json
+          title: Type
+          default: json
+        json_schema:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Json Schema
+          description: A JSON Schema object defining the structure
+      type: object
+      title: JsonSchemaSpec
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TaskSpec:
+      properties:
+        output_schema:
+          anyOf:
+          - $ref: '#/components/schemas/JsonSchemaSpec'
+          - type: 'null'
+      type: object
+      title: TaskSpec
     TaskListResponse:
       properties:
         tasks:
@@ -349,30 +394,6 @@ components:
       required:
       - tasks
       title: TaskListResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    RejectionReason:
-      type: string
-      enum:
-      - insufficient_prepaid_balance
-      - budget_exceeded
-      - subscription_inactive
-      title: RejectionReason
-    TaskSpec:
-      properties:
-        output_schema:
-          anyOf:
-          - $ref: '#/components/schemas/JsonSchemaSpec'
-          - type: 'null'
-      type: object
-      title: TaskSpec
     AgentRunRequest:
       properties:
         output_schema:
@@ -476,27 +497,6 @@ components:
       - task
       - start_url
       title: AgentRunRequest
-    TaskListSummary:
-      properties:
-        running:
-          type: integer
-          title: Running
-          description: Number of tasks still running
-        succeeded:
-          type: integer
-          title: Succeeded
-          description: Number of tasks with retrievable results
-        failed:
-          type: integer
-          title: Failed
-          description: Number of terminal tasks without retrievable results
-      type: object
-      required:
-      - running
-      - succeeded
-      - failed
-      title: TaskListSummary
-      description: Summary counts of one-time tasks by lightweight list status.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
