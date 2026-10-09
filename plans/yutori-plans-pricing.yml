@@ -1,0 +1,171 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://docs.yutori.com/pricing
+sources:
+- https://docs.yutori.com/pricing
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T104522
+  grounding: every price_text was found verbatim in the fetched page text
+audience: developer-api
+pricing_basis: per-call
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-07'
+  managed_tier: Pay-as-you-go
+published: true
+note: Pay-as-you-go token/step/task pricing; page notes the API is being sunset and no longer accepting
+  new sign-ups. Enterprise tier is negotiated.
+plan_count: 10
+currency: USD
+plans:
+- name: Navigator n2 - input tokens
+  price_text: $0.50 per 1 million input tokens.
+  price: 0.5
+  currency: USD
+  period: per-use
+  unit: 1 million input tokens
+- name: Navigator n2 - cached input tokens
+  price_text: $0.05 per 1 million cached input tokens.
+  price: 0.05
+  currency: USD
+  period: per-use
+  unit: 1 million cached input tokens
+- name: Navigator n2 - output/reasoning tokens
+  price_text: $4 per 1 million output or reasoning tokens.
+  price: 4
+  currency: USD
+  period: per-use
+  unit: 1 million output or reasoning tokens
+- name: Navigator n1.5 - input tokens
+  price_text: $1.50 per 1 million input tokens.
+  price: 1.5
+  currency: USD
+  period: per-use
+  unit: 1 million input tokens
+- name: Navigator n1.5 - output tokens
+  price_text: $5 per 1 million output tokens.
+  price: 5
+  currency: USD
+  period: per-use
+  unit: 1 million output tokens
+- name: Browsing API - navigator-n1.5-latest
+  price_text: $0.015
+  price: 0.015
+  currency: USD
+  period: per-use
+  unit: per step
+- name: Browsing API - claude-sonnet-4-5-computer-use-2025-01-24
+  price_text: $0.10
+  price: 0.1
+  currency: USD
+  period: per-use
+  unit: per step
+- name: Research API
+  price_text: $0.35 per research task
+  price: 0.35
+  currency: USD
+  period: per-use
+  unit: research task
+- name: Scouting API
+  price_text: $0.35 per scout-run
+  price: 0.35
+  currency: USD
+  period: per-use
+  unit: scout-run
+- name: Enterprise
+  price_text: For enterprise or high-volume use cases, please get in touch
+  period: none
+  included_quota: Custom workflows and integrations; Dedicated support and SLAs; Early access to new features
+rate_limit_statements:
+- You control the maximum number of steps with the max_steps parameter.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - hybrid
+  - subscription
+  units:
+  - token
+  plans:
+  - name: Navigator n2 - input tokens
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - token
+    periods:
+    - other
+  - name: Navigator n2 - cached input tokens
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - token
+    periods:
+    - other
+  - name: Navigator n2 - output/reasoning tokens
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - token
+    periods:
+    - other
+  - name: Navigator n1.5 - input tokens
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - token
+    periods:
+    - other
+  - name: Navigator n1.5 - output tokens
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - token
+    periods:
+    - other
+  - name: Browsing API - navigator-n1.5-latest
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: Browsing API - claude-sonnet-4-5-computer-use-2025-01-24
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: Research API
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: Scouting API
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: Enterprise
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
