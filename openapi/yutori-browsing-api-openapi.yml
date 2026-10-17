@@ -160,6 +160,90 @@ components:
       - budget_exceeded
       - subscription_inactive
       title: RejectionReason
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TaskListResponse:
+      properties:
+        tasks:
+          items:
+            $ref: '#/components/schemas/TaskListItem'
+          type: array
+          title: Tasks
+        total:
+          type: integer
+          title: Total
+          description: Total count of all tasks (running + succeeded + failed)
+          default: 0
+        filtered_total:
+          type: integer
+          title: Filtered Total
+          description: Count of tasks matching the current filter
+          default: 0
+        summary:
+          anyOf:
+          - $ref: '#/components/schemas/TaskListSummary'
+          - type: 'null'
+          description: Counts by status
+        page_size:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Page Size
+          description: Requested page size (null if returning all)
+        has_more:
+          type: boolean
+          title: Has More
+          description: Whether more results exist after this page
+          default: false
+        prev_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev Cursor
+          description: Cursor for previous page
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+          description: Cursor for next page
+      type: object
+      required:
+      - tasks
+      title: TaskListResponse
     AgentRunResponse:
       properties:
         task_id:
@@ -286,15 +370,6 @@ components:
       - view_url
       title: TaskListItem
       description: Lightweight one-time task metadata for developer API list endpoints.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     JsonSchemaSpec:
       properties:
         type:
@@ -311,89 +386,6 @@ components:
           description: A JSON Schema object defining the structure
       type: object
       title: JsonSchemaSpec
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    TaskSpec:
-      properties:
-        output_schema:
-          anyOf:
-          - $ref: '#/components/schemas/JsonSchemaSpec'
-          - type: 'null'
-      type: object
-      title: TaskSpec
-    TaskListResponse:
-      properties:
-        tasks:
-          items:
-            $ref: '#/components/schemas/TaskListItem'
-          type: array
-          title: Tasks
-        total:
-          type: integer
-          title: Total
-          description: Total count of all tasks (running + succeeded + failed)
-          default: 0
-        filtered_total:
-          type: integer
-          title: Filtered Total
-          description: Count of tasks matching the current filter
-          default: 0
-        summary:
-          anyOf:
-          - $ref: '#/components/schemas/TaskListSummary'
-          - type: 'null'
-          description: Counts by status
-        page_size:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Page Size
-          description: Requested page size (null if returning all)
-        has_more:
-          type: boolean
-          title: Has More
-          description: Whether more results exist after this page
-          default: false
-        prev_cursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Prev Cursor
-          description: Cursor for previous page
-        next_cursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next Cursor
-          description: Cursor for next page
-      type: object
-      required:
-      - tasks
-      title: TaskListResponse
     AgentRunRequest:
       properties:
         output_schema:
@@ -497,6 +489,14 @@ components:
       - task
       - start_url
       title: AgentRunRequest
+    TaskSpec:
+      properties:
+        output_schema:
+          anyOf:
+          - $ref: '#/components/schemas/JsonSchemaSpec'
+          - type: 'null'
+      type: object
+      title: TaskSpec
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
