@@ -69,3 +69,27 @@ tool_quality:
   scored: false
   note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
     from Glimind's agent-readiness audit.
+tools:
+- name: list_api_usage
+  description: Get Yutori usage statistics including active scouts, rate limits, and activity metrics.
+- name: list_scouts
+  description: List scouts for the authenticated Yutori user.
+- name: get_scout_detail
+  description: Get detailed information about a specific scout.
+- name: get_scout_updates
+  description: Get paginated updates and reports for a scout.
+- name: create_scout
+  description: Create a monitoring scout for continuous web monitoring.
+- name: edit_scout
+  description: Update a scout's query, schedule, webhook configuration, or status.
+- name: delete_scout
+  description: Permanently delete a scout and all its data.
+- name: run_browsing_task
+  description: Execute a one-time web browsing task and return a task_id for polling.
+- name: get_browsing_task_result
+  description: Poll for browsing task status and result.
+- name: run_research_task
+  description: Execute a one-time deep web research task and return a task_id for polling.
+- name: get_research_task_result
+  description: Poll for research task status and result.
+tools_count: 11
