@@ -1,0 +1,521 @@
+{
+  "endpoint": "https://api.yutori.com/mcp",
+  "captured": "2026-10-20",
+  "method": "initialize + tools/list (anonymous, no tool called; roadmap#992)",
+  "protocol_version": "2025-06-18",
+  "server_info": {
+    "name": "yutori-mcp",
+    "version": "1.29.0"
+  },
+  "result": {
+    "tools": [
+      {
+        "name": "list_api_usage",
+        "description": "Get Yutori usage statistics including active scouts, rate limits, and activity metrics.",
+        "inputSchema": {
+          "properties": {
+            "period": {
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                ""
+              ],
+              "type": "string",
+              "default": "24h",
+              "description": "Time range for activity counts: '24h' (default), '7d', '30d', or '90d'",
+              "title": "Period"
+            }
+          },
+          "title": "UsageInput",
+          "type": "object"
+        },
+        "annotations": {
+          "readOnlyHint": true
+        }
+      },
+      {
+        "name": "list_scouts",
+        "description": "List scouts for the authenticated Yutori user.",
+        "inputSchema": {
+          "properties": {
+            "limit": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "default": 50,
+              "description": "Maximum number of scouts to return.",
+              "title": "Limit"
+            },
+            "status": {
+              "enum": [
+                "active",
+                "paused",
+                "done",
+                "all",
+                ""
+              ],
+              "type": "string",
+              "default": "all",
+              "description": "Filter by status. Use 'all' or omit to list every scout.",
+              "title": "Status"
+            }
+          },
+          "title": "ListScoutsInput",
+          "type": "object"
+        },
+        "annotations": {
+          "readOnlyHint": true
+        }
+      },
+      {
+        "name": "get_scout_detail",
+        "description": "Get detailed information about a specific scout.",
+        "inputSchema": {
+          "properties": {
+            "scout_id": {
+              "description": "The scout's unique identifier.",
+              "title": "Scout Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "scout_id"
+          ],
+          "title": "ScoutIdInput",
+          "type": "object"
+        },
+        "annotations": {
+          "readOnlyHint": true
+        }
+      },
+      {
+        "name": "get_scout_updates",
+        "description": "Get paginated updates and reports for a scout.",
+        "inputSchema": {
+          "properties": {
+            "scout_id": {
+              "description": "The scout's unique identifier.",
+              "title": "Scout Id",
+              "type": "string"
+            },
+            "cursor": {
+              "type": "string",
+              "default": null,
+              "description": "Pagination cursor from a previous response.",
+              "title": "Cursor"
+            },
+            "limit": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "default": 20,
+              "description": "Maximum number of updates to return.",
+              "title": "Limit"
+            }
+          },
+          "required": [
+            "scout_id"
+          ],
+          "title": "GetUpdatesInput",
+          "type": "object"
+        },
+        "annotations": {
+          "readOnlyHint": true
+        }
+      },
+      {
+        "name": "create_scout",
+        "description": "Create a monitoring scout for continuous web monitoring.",
+        "inputSchema": {
+          "properties": {
+            "query": {
+              "description": "Natural language description of what to monitor.",
+              "title": "Query",
+              "type": "string"
+            },
+            "output_interval": {
+              "minimum": 1800,
+              "type": "integer",
+              "default": 86400,
+              "description": "Seconds between scout runs. Minimum 1800 (30 minutes). Default: 86400 (daily)",
+              "title": "Output Interval"
+            },
+            "webhook_url": {
+              "type": "string",
+              "default": null,
+              "description": "Optional HTTPS URL for webhook notifications. Omit when email notifications are enough.",
+              "title": "Webhook Url"
+            },
+            "webhook_format": {
+              "enum": [
+                "scout",
+                "slack",
+                "zapier",
+                ""
+              ],
+              "type": "string",
+              "default": null,
+              "description": "Webhook payload format. Only set when webhook_url is provided.",
+              "title": "Webhook Format"
+            },
+            "output_fields": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "default": null,
+              "description": "Optional: Extract structured data as an array of objects with these field names. Example: ['headline', 'summary', 'url']. If omitted, returns human-readable text. For complex schemas, call the Yutori REST API directly (see example at: https://docs.yutori.com/reference/scouts-create#using-scheduling-webhooks-and-a-structured-output-schema).",
+              "title": "Output Fields"
+            },
+            "user_timezone": {
+              "type": "string",
+              "default": "America/Los_Angeles",
+              "description": "Timezone for scheduling.",
+              "title": "User Timezone"
+            },
+            "skip_email": {
+              "type": "boolean",
+              "default": false,
+              "description": "If true, skip email notifications.",
+              "title": "Skip Email"
+            },
+            "start_timestamp": {
+              "type": "integer",
+              "default": 0,
+              "description": "Unix timestamp for when monitoring should start.",
+              "title": "Start Timestamp"
+            },
+            "user_location": {
+              "type": "string",
+              "default": "San Francisco, CA, US",
+              "description": "User location for geo-relevant searches.",
+              "title": "User Location"
+            },
+            "is_public": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether scout results are publicly accessible.",
+              "title": "Is Public"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "title": "CreateScoutInput",
+          "type": "object"
+        }
+      },
+      {
+        "name": "edit_scout",
+        "description": "Update a scout's query, schedule, webhook configuration, or status.",
+        "inputSchema": {
+          "properties": {
+            "scout_id": {
+              "description": "The scout's unique identifier.",
+              "title": "Scout Id",
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "active",
+                "paused",
+                "done",
+                ""
+              ],
+              "type": "string",
+              "default": null,
+              "description": "Change scout status: active, paused, or done.",
+              "title": "Status"
+            },
+            "query": {
+              "type": "string",
+              "default": null,
+              "description": "Updated monitoring query.",
+              "title": "Query"
+            },
+            "output_interval": {
+              "minimum": 1800,
+              "type": "integer",
+              "default": null,
+              "description": "Updated run interval in seconds. Minimum 1800 (30 minutes).",
+              "title": "Output Interval"
+            },
+            "webhook_url": {
+              "type": "string",
+              "default": null,
+              "description": "Updated HTTPS webhook URL. Set to an empty string to remove existing webhooks.",
+              "title": "Webhook Url"
+            },
+            "webhook_format": {
+              "enum": [
+                "scout",
+                "slack",
+                "zapier",
+                ""
+              ],
+              "type": "string",
+              "default": null,
+              "description": "Webhook payload format. Only set when webhook_url is provided.",
+              "title": "Webhook Format"
+            },
+            "output_fields": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "default": null,
+              "description": "Optional: Extract structured data as an array of objects with these field names. Example: ['headline', 'summary', 'url']. If omitted, returns human-readable text. For complex schemas, call the Yutori REST API directly",
+              "title": "Output Fields"
+            },
+            "skip_email": {
+              "type": "boolean",
+              "default": null,
+              "description": "Updated email notification preference.",
+              "title": "Skip Email"
+            },
+            "user_timezone": {
+              "type": "string",
+              "default": null,
+              "description": "Timezone for scheduling.",
+              "title": "User Timezone"
+            },
+            "user_location": {
+              "type": "string",
+              "default": null,
+              "description": "User location for geo-relevant searches.",
+              "title": "User Location"
+            },
+            "is_public": {
+              "type": "boolean",
+              "default": null,
+              "description": "Whether scout results are publicly accessible.",
+              "title": "Is Public"
+            }
+          },
+          "required": [
+            "scout_id"
+          ],
+          "title": "EditScoutInput",
+          "type": "object"
+        },
+        "annotations": {
+          "idempotentHint": true
+        }
+      },
+      {
+        "name": "delete_scout",
+        "description": "Permanently delete a scout and all its data.",
+        "inputSchema": {
+          "properties": {
+            "scout_id": {
+              "description": "The scout's unique identifier.",
+              "title": "Scout Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "scout_id"
+          ],
+          "title": "ScoutIdInput",
+          "type": "object"
+        },
+        "annotations": {
+          "destructiveHint": true
+        }
+      },
+      {
+        "name": "run_browsing_task",
+        "description": "Execute a one-time web browsing task and return a task_id for polling.",
+        "inputSchema": {
+          "properties": {
+            "task": {
+              "description": "Natural language instruction for the navigator agent.",
+              "title": "Task",
+              "type": "string"
+            },
+            "start_url": {
+              "description": "The URL where the navigator should begin.",
+              "title": "Start Url",
+              "type": "string"
+            },
+            "max_steps": {
+              "maximum": 100,
+              "minimum": 2,
+              "type": "integer",
+              "default": 50,
+              "description": "Maximum number of browser actions.",
+              "title": "Max Steps"
+            },
+            "require_auth": {
+              "type": "boolean",
+              "default": false,
+              "description": "Use an auth-optimized cloud browser provider.",
+              "title": "Require Auth"
+            },
+            "browser": {
+              "enum": [
+                "cloud",
+                "local",
+                ""
+              ],
+              "type": "string",
+              "default": "cloud",
+              "description": "Where to run the browser.",
+              "title": "Browser"
+            },
+            "output_fields": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "default": null,
+              "description": "Optional: Extract structured data as an array of objects with these field names. Example: ['name', 'title', 'email']. If omitted, returns human-readable text. For complex schemas, call the Yutori REST API directly (see example at: https://docs.yutori.com/reference/browsing-create#using-webhooks-and-a-structured-output-schema).",
+              "title": "Output Fields"
+            },
+            "webhook_url": {
+              "type": "string",
+              "default": null,
+              "description": "Optional HTTPS URL for completion webhook. Omit when webhook delivery is not needed.",
+              "title": "Webhook Url"
+            },
+            "webhook_format": {
+              "enum": [
+                "scout",
+                "slack",
+                "zapier",
+                ""
+              ],
+              "type": "string",
+              "default": null,
+              "description": "Webhook payload format. Only set when webhook_url is provided.",
+              "title": "Webhook Format"
+            }
+          },
+          "required": [
+            "task",
+            "start_url"
+          ],
+          "title": "BrowsingTaskInput",
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_browsing_task_result",
+        "description": "Poll for browsing task status and result.",
+        "inputSchema": {
+          "properties": {
+            "task_id": {
+              "description": "The task's unique identifier.",
+              "title": "Task Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "task_id"
+          ],
+          "title": "TaskIdInput",
+          "type": "object"
+        },
+        "annotations": {
+          "readOnlyHint": true
+        }
+      },
+      {
+        "name": "run_research_task",
+        "description": "Execute a one-time deep web research task and return a task_id for polling.",
+        "inputSchema": {
+          "properties": {
+            "query": {
+              "description": "Natural language description of what to research.",
+              "title": "Query",
+              "type": "string"
+            },
+            "mode": {
+              "default": "deep",
+              "description": "Research mode. Fast trades quality for latency.",
+              "enum": [
+                "deep",
+                "fast"
+              ],
+              "title": "Mode",
+              "type": "string"
+            },
+            "user_timezone": {
+              "type": "string",
+              "default": "America/Los_Angeles",
+              "description": "Timezone for contextual awareness.",
+              "title": "User Timezone"
+            },
+            "user_location": {
+              "type": "string",
+              "default": "San Francisco, CA, US",
+              "description": "Location for contextual awareness.",
+              "title": "User Location"
+            },
+            "output_fields": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "default": null,
+              "description": "Optional: Extract structured data as an array of objects with these field names. Example: ['title', 'summary', 'source_url']. If omitted, returns human-readable text. For complex schemas, call the Yutori REST API directly (see example at: https://docs.yutori.com/reference/research-create#using-webhooks-and-a-structured-output-schema).",
+              "title": "Output Fields"
+            },
+            "webhook_url": {
+              "type": "string",
+              "default": null,
+              "description": "Optional HTTPS URL for completion webhook. Omit when webhook delivery is not needed.",
+              "title": "Webhook Url"
+            },
+            "webhook_format": {
+              "enum": [
+                "scout",
+                "slack",
+                "zapier",
+                ""
+              ],
+              "type": "string",
+              "default": null,
+              "description": "Webhook payload format. Only set when webhook_url is provided.",
+              "title": "Webhook Format"
+            },
+            "skip_email": {
+              "type": "boolean",
+              "default": true,
+              "description": "If true, skip email notifications.",
+              "title": "Skip Email"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "title": "ResearchTaskInput",
+          "type": "object"
+        }
+      },
+      {
+        "name": "get_research_task_result",
+        "description": "Poll for research task status and result.",
+        "inputSchema": {
+          "properties": {
+            "task_id": {
+              "description": "The task's unique identifier.",
+              "title": "Task Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "task_id"
+          ],
+          "title": "TaskIdInput",
+          "type": "object"
+        },
+        "annotations": {
+          "readOnlyHint": true
+        }
+      }
+    ]
+  }
+}
