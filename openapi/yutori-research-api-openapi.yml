@@ -584,3 +584,9 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: 'Use Authorization: Bearer <api_key>'
+x-provenance:
+  method: harvested
+  publisher: Yutori
+  source: https://docs.yutori.com/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
