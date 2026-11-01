@@ -64,6 +64,139 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Yutori is a company surfaced as a portfolio company of felicis and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+Yutori builds AI web agents delivered as an API. Its Navigator (n1.5) computer-use model drives cloud browsers to navigate, click, type, and extract structured data, and is OpenAI Chat Completions compatible. Scouts are always-on agents that monitor the web and alert on changes; the Research API runs one-time multi-source web research; and a hosted MCP server exposes the same capabilities over the Model Context Protocol. Founded in 2024 by former Meta AI researchers and backed by Radical Ventures and Felicis, Yutori is strongly agent-native: API-key bearer auth, published llms.txt, agent Skills, an RFC 9727 API catalog, and OAuth resource metadata. Pay-as-you-go pricing with $5 in free credits.
 
-Backed by: felicis — https://yutori.com
+**Areas:** Company · Artificial Intelligence · Agents · Browser Automation · Web Monitoring · Research · MCP · LLM · Foundation Models
+
+## Yutori on APIs.io
+
+Everything profiled for Yutori is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/yutori/](https://apis.io/providers/yutori/)** — or go straight to one of the APIs or properties below.
+
+### APIs (5)
+
+- [Yutori Browsing API](https://apis.io/apis/yutori/yutori-browsing-api/) — The Browsing API from Yutori — 3 operation(s) for browsing.
+- [Yutori Chat Completions API](https://apis.io/apis/yutori/yutori-chat-completions-api/) — The Chat Completions API from Yutori — 1 operation(s) for chat completions.
+- [Yutori Health API](https://apis.io/apis/yutori/yutori-health-api/) — The Health API from Yutori — 1 operation(s) for health.
+- [Yutori Research API](https://apis.io/apis/yutori/yutori-research-api/) — The Research API from Yutori — 2 operation(s) for research.
+- [Yutori Scouting API](https://apis.io/apis/yutori/yutori-scouting-api/) — The Scouting API from Yutori — 16 operation(s) for scouting.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Yutori Webhooks](https://apis.io/asyncapis/yutori/yutori-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [Yutori MCP](https://apis.io/servers/yutori/com-yutori-yutori-mcp/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Yutori Agentic Access](https://apis.io/agentic-access/yutori/yutori-agentic-access/)
+
+#### Collections (5)
+
+Postman and Open Collection request collections.
+
+- [Fast Browsing API](https://apis.io/collections/yutori/open-yutori-browsing-api/)
+- [Fast Browsing Chat Completions API](https://apis.io/collections/yutori/open-yutori-chat-completions-api/)
+- [Fast Browsing Health API](https://apis.io/collections/yutori/open-yutori-health-api/)
+- [Fast Browsing Research API](https://apis.io/collections/yutori/open-yutori-research-api/)
+- [Fast Browsing Scouting API](https://apis.io/collections/yutori/open-yutori-scouting-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Yutori Openapi Overlay](https://apis.io/overlays/yutori/yutori-openapi-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Yutori Authentication](https://apis.io/security/yutori/yutori-authentication/)
+- [Yutori Domain Security](https://apis.io/security/yutori/yutori-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Yutori Plans Pricing](https://apis.io/plans/yutori/yutori-plans-pricing/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://yutori.com)
+- [Documentation](https://docs.yutori.com)
+- [Getting started](https://docs.yutori.com/llm-quickstart)
+- [API reference](https://docs.yutori.com/openapi.json)
+- [Pricing](https://docs.yutori.com/pricing)
+- [Sign up](https://platform.yutori.com/sign-up)
+- [Blog](https://yutori.com/blog)
+- [Terms of service](https://yutori.com/tos)
+- [Privacy policy](https://yutori.com/privacy)
+- [GitHub](https://github.com/yutori-ai)
+
+## API Evangelist rating
+
+**Kin Score 51.7** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 57.2 |
+| Contract governance | 4.5 |
+| Operational transparency | 18.4 |
+| Developer ergonomics | 71.4 |
+| Access clarity | 63.2 |
+
+**Agent readiness 51.1** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | yes |
+| Well Known Catalog | yes |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 22.7** — AI & Biometrics
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/yutori/](https://apis.io/providers/yutori/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Yutori: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/yutori/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
